@@ -2843,7 +2843,7 @@ function n2Act(d) {
   return '<p class="n2-p n2-h36">Archie was active <b>' + a.n + ' times</b> today, ' + (D.base ? 'less' : ddCmp(a.n, a.avg)) + ' than usual.</p><div class="n2-gray n2-g2"><div class="n2-top"><div class="n2-ed-t"><b>Activity</b><small>Last 7 days</small></div>' + n2Chip(a.pct + '% from last week', a.up) + '</div>' + n2Row('act', a.avg, d) + '</div>';
 }
 function n2BM(d) {
-  const D = dayData(d), b = D.base ? { n: 35, avg: 40, pct: 10, up: false } : D.bark, m = D.base ? { n: 12, avg: 15, pct: 5, up: false } : D.meow;
+  const D = dayData(d), b = D.base ? { n: 35, avg: 40, pct: 10, up: true } : D.bark, m = D.base ? { n: 12, avg: 15, pct: 5, up: false } : D.meow;
   const g = (k, t, o) => '<div class="n2-gray n2-g2"><div class="n2-top"><div class="n2-ed-t"><b>' + t + '</b><small>Last 7 days</small></div>' + n2Chip(o.pct + '% from last week', o.up) + '</div>' + n2Row(k, o.avg, d) + '</div>';
   const bd = ddCmp(b.n, b.avg), md = ddCmp(m.n, m.avg);
   const sent = D.base || bd === md ? 'Archie was barking <b>' + b.n + ' times</b><span class="r"> today</span> and Teddy was meowing <b>' + m.n + ' times</b>, both ' + bd + ' than usual.'
