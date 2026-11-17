@@ -2776,9 +2776,14 @@ function dayData(d) {
 const ddCmp = (v, a) => v >= a ? 'more' : 'less';
 function n2Chart(k, d) {
   const g = CH[k], lt = n2Letters(d), jr = ddRnd(+d * 31 + k.length * 17);
-  const vals = (+d === 18 || +d === 15) ? g.vals : g.vals.map(h => Math.max(8, Math.min(g.area, Math.round(h * (.65 + .7 * jr())))));
+  const vals = (+d === 18 || +d === 15) ? g.vals.slice() : g.vals.map(h => Math.max(8, Math.min(g.area, Math.round(h * (.65 + .7 * jr())))));
+  let hi = g.hi;
+  if (k === 'bark' || k === 'meow') {                       // Thursday is the dark-blue (highlighted) bar, and the tallest
+    const ti = RP_X.findIndex((_, i) => (+d - 6 + i - 8 + 70) % 7 === 4);
+    if (ti > -1) { const m = vals.indexOf(Math.max(...vals)); [vals[m], vals[ti]] = [vals[ti], vals[m]]; hi = ti; }
+  }
   return '<div class="n2-ch" style="height:' + g.h + 'px">' +
-    vals.map((h, i) => '<i class="' + (g.hi === i ? 'hi' : '') + '" style="--bi:' + i + ';left:' + RP_X[i] + 'px;top:' + (g.area - h) + 'px;height:' + h + 'px"></i>').join('') +
+    vals.map((h, i) => '<i class="' + (hi === i ? 'hi' : '') + '" style="--bi:' + i + ';left:' + RP_X[i] + 'px;top:' + (g.area - h) + 'px;height:' + h + 'px"></i>').join('') +
     '<img class="n2-ln" src="' + A + g.lf + '.svg" alt="" style="top:' + g.line + 'px">' +
     lt.map((l, i) => '<em class="' + (i === 6 ? 't' : '') + '" style="left:' + RP_X[i] + 'px;top:' + g.let + 'px">' + l + '</em>').join('') + '</div>';
 }
