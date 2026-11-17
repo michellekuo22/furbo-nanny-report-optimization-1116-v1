@@ -2769,7 +2769,7 @@ function dayData(d) {
   const x = {};
   x.eat = { n: pick(4, 9), avg: pick(6, 8), pct: pick(5, 24) }; x.drink = { n: pick(8, 15), avg: pick(8, 11), pct: pick(6, 22) };
   x.act = { n: pick(230, 380), avg: pick(280, 330), pct: pick(4, 18) }; x.bark = { n: pick(15, 60), avg: pick(30, 48), pct: pick(4, 20) }; x.meow = { n: pick(8, 36), avg: pick(22, 36), pct: pick(3, 18) };
-  [x.eat, x.drink, x.act, x.bark, x.meow].forEach(o => { o.up = r() > .5; });
+  [x.eat, x.drink, x.act, x.bark, x.meow].forEach(o => { o.up = o.n >= o.avg; });   // chip colour always agrees with the "more / less than usual" wording
   x.diary = n === 15 ? { poster: N2 + 'diary_poster_15.jpg', vid: 'live', txt: 'Today, Archie had a fun-filled day! He played with his favorite bone toy, stretched out on the rug, and enjoyed looking out the window.' } : DD_DIARY[(n * 3 + 1) % DD_DIARY.length]; x.jit = n;
   return x;
 }
@@ -2845,8 +2845,8 @@ function n2Act(d) {
 function n2BM(d) {
   const D = dayData(d), b = D.base ? { n: 35, avg: 40, pct: 10, up: true } : D.bark, m = D.base ? { n: 12, avg: 15, pct: 5, up: false } : D.meow;
   const g = (k, t, o) => '<div class="n2-gray n2-g2"><div class="n2-top"><div class="n2-ed-t"><b>' + t + '</b><small>Last 7 days</small></div>' + n2Chip(o.pct + '% from last week', o.up) + '</div>' + n2Row(k, o.avg, d) + '</div>';
-  const bd = ddCmp(b.n, b.avg), md = ddCmp(m.n, m.avg);
-  const sent = D.base || bd === md ? 'Archie was barking <b>' + b.n + ' times</b><span class="r"> today</span> and Teddy was meowing <b>' + m.n + ' times</b>, both ' + bd + ' than usual.'
+  const bd = b.up ? 'more' : 'less', md = m.up ? 'more' : 'less';
+  const sent = bd === md ? 'Archie was barking <b>' + b.n + ' times</b><span class="r"> today</span> and Teddy was meowing <b>' + m.n + ' times</b>, both ' + bd + ' than usual.'
     : 'Archie was barking <b>' + b.n + ' times</b><span class="r"> today</span>, ' + bd + ' than usual, and Teddy was meowing <b>' + m.n + ' times</b>, ' + md + ' than usual.';
   return '<p class="n2-p">' + sent + '</p>' + g('bark', 'Barking', b) + g('meow', 'Meowing', m) +
     '<div class="rp-soothe2"><img src="' + A + 'B2_soothe.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>';
