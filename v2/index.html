@@ -2735,7 +2735,7 @@ function setupPlayer() {
 let rpDay = '15', RP_DESIGN = 'A';
 const A = 'assets/n/', N2 = 'assets/n2/';
 const pad2 = n => String(n).padStart(2, '0');
-const RP_TODAY = 17, WK_DAY = 15;      // purple weekly cards live on Sunday 11/15 only
+const RP_TODAY = 18, RP_READY = 17, WK_DAY = 15;      // purple weekly cards live on Sunday 11/15 only
 let PREMIUM = true;
 const RP_X = [4, 25, 46, 67, 88, 109, 130];
 const ICO = {   // [file, left, top, w, h] inside the icon box (Figma geometry)
@@ -2810,9 +2810,9 @@ const CMP = [
   { k: 'act', name: 'Archie', rest: ' is less active than similar dogs. Try short walks to keep him moving.',
     a: { l: 'Archie', v: 305, w: 152, tr: 72.5, trk: true, kind: 'g' }, s: { l: 'Similar dogs', v: 350, w: 202, tr: 100, trk: false, kind: 's' } },
   { k: 'bark', name: 'Archie', rest: ' barks more than similar dogs. Offer his favorite toy to feel safe.',
-    a: { l: 'Archie', v: 325, w: 203, tr: 100, trk: false, kind: 'g' }, s: { l: 'Similar dogs', v: 250, w: 139, tr: 55, trk: true, kind: 's' } },
+    a: { l: 'Archie', v: 40, w: 203, tr: 100, trk: false, kind: 'g' }, s: { l: 'Similar dogs', v: 22, w: 116, tr: 58.7, trk: true, kind: 's' } },
   { k: 'meow', name: 'Teddy', rest: ' meows less than similar cats. Watch for changes in his usual habits.',
-    a: { l: 'Teddy', v: 95, w: 109, tr: 54.8, trk: true, kind: 'g' }, s: { l: 'Similar cats', v: 150, w: 203, tr: 100, trk: false, kind: 's' } },
+    a: { l: 'Teddy', v: 15, w: 109, tr: 54.8, trk: true, kind: 'g' }, s: { l: 'Similar cats', v: 32, w: 207, tr: 100, trk: false, kind: 's' } },
 ];
 function n2WeekB(d) {
   const blocks = CMP.map(c => '<div class="n2-wb"><div class="n2-wb-h">' + n2Icon(c.k) + '<p>' + (t => { const k = t.indexOf(' than'); return '<b>' + t.slice(0, k) + '</b>' + t.slice(k); })(c.name + c.rest) + '</p></div><div class="n2-wb-c">' +
@@ -2841,7 +2841,7 @@ function n2Act(d) {
   return '<p class="n2-p n2-h36">Archie was active <b>' + a.n + ' times</b> today, ' + (D.base ? 'less' : ddCmp(a.n, a.avg)) + ' than usual.</p><div class="n2-gray n2-g2"><div class="n2-top"><div class="n2-ed-t"><b>Activity</b><small>Last 7 days</small></div>' + n2Chip(a.pct + '% from last week', a.up) + '</div>' + n2Row('act', a.avg, d) + '</div>';
 }
 function n2BM(d) {
-  const D = dayData(d), b = D.base ? { n: 35, avg: 40, pct: 10, up: false } : D.bark, m = D.base ? { n: 20, avg: 30, pct: 5, up: false } : D.meow;
+  const D = dayData(d), b = D.base ? { n: 35, avg: 40, pct: 10, up: false } : D.bark, m = D.base ? { n: 20, avg: 15, pct: 5, up: false } : D.meow;
   const g = (k, t, o) => '<div class="n2-gray n2-g2"><div class="n2-top"><div class="n2-ed-t"><b>' + t + '</b><small>Last 7 days</small></div>' + n2Chip(o.pct + '% from last week', o.up) + '</div>' + n2Row(k, o.avg, d) + '</div>';
   const bd = ddCmp(b.n, b.avg), md = ddCmp(m.n, m.avg);
   const sent = D.base || bd === md ? 'Archie was barking <b>' + b.n + ' times</b><span class="r"> today</span> and Teddy was meowing <b>' + m.n + ' times</b>, both ' + bd + ' than usual.'
@@ -3204,7 +3204,7 @@ function renderReportDay(d) {
   renderStrip(d);
   closeCalendar();
   document.querySelectorAll('#rp-days .rp-day').forEach(b => b.classList.toggle('on', b.dataset.rpday === d));
-  const page = document.getElementById('page-report'), ready = +d <= RP_TODAY;
+  const page = document.getElementById('page-report'), ready = +d <= RP_READY;
   page.classList.toggle('not-ready', !ready);
   page.scrollTop = 0;
   if (!ready) return;
@@ -3347,6 +3347,8 @@ dpPanel.addEventListener('click', e => {
   setDesign(b.dataset.d);
   if (matchMedia('(max-width: 560px)').matches) setTimeout(() => dpPanel.classList.remove('open'), 150);
 });
+// open straight on the Nanny Report page
+document.querySelector('.nav-item[data-tab="report"]').click();
 </script>
 </body>
 </html>
