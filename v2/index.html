@@ -409,8 +409,8 @@ img { display: block; }
 .rp-diary-media { position: relative; aspect-ratio: 326 / 187; border-radius: 8px; overflow: hidden; background: #000; cursor: pointer; }
 .rp-diary-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rp-avatar { display: none; position: absolute; left: -10px; top: 147px; width: 62px; height: 62px; z-index: 2; pointer-events: none; }
-.rp-diary-media img.rp-dplay { position: absolute; left: 145.13px; top: 75.43px; width: 34.33px; height: 38.08px; object-fit: contain; pointer-events: none; }
-.rp-diary-media img.rp-dkebab { position: absolute; left: 304px; top: 155px; width: 12px; height: 26px; object-fit: contain; pointer-events: none; }
+.rp-diary-media img.rp-dplay { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin-top: -.5px; width: 34.33px; height: 38.08px; max-width: none; object-fit: contain; pointer-events: none; }
+.rp-diary-media img.rp-dkebab { position: absolute; left: auto; top: auto; right: 10px; bottom: 6px; width: 12px; height: 26px; max-width: none; object-fit: contain; pointer-events: none; }
 .rp-diary-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; background: #000; }
 .rp-diary-media.playing video { display: block; }
 .rp-diary-media.playing img.rp-dplay { display: none; }
@@ -2820,7 +2820,7 @@ const CMP = [
 CMP.forEach(c => { const mx = Math.max(c.a.v, c.s.v), W = { act: 202, bark: 203, meow: 207 }[c.k]; [c.a, c.s].forEach(r => { r.tr = +(r.v / mx * 100).toFixed(1); r.w = Math.round(r.v / mx * W); r.trk = r.v < mx; }); });
 function n2WeekB(d) {
   const blocks = CMP.map(c => '<div class="n2-wb"><div class="n2-wb-h">' + n2Icon(c.k) + '<p>' + (t => { const k = t.indexOf(' than'); return '<b>' + t.slice(0, k) + '</b>' + t.slice(k); })(c.name + c.rest) + '</p></div><div class="n2-wb-c">' +
-    [c.a, c.s].map((r, i) => '<div class="n2-we"><span class="l' + (i ? ' m' : '') + '">' + r.l + '</span><div class="r"><i class="g' + (i ? ' s' : '') + '" style="width:calc((100% - 96px) * ' + (r.tr / 100).toFixed(3) + ')"></i><span class="v' + (i ? '' : ' hi') + '"><b>' + r.v + '</b> <u>times/day</u></span></div></div>').join('') + '</div></div>').join('');
+    [c.a, c.s].map((r, i) => '<div class="n2-we"><span class="l' + (i ? ' m' : '') + '">' + r.l + '</span><div class="r"><i class="g' + (i ? ' s' : '') + '" data-f="' + (r.tr / 100).toFixed(3) + '" style="width:calc((100% - 96px) * ' + (r.tr / 100).toFixed(3) + ')"></i><span class="v' + (i ? '' : ' hi') + '"><b>' + r.v + '</b> <u>times/day</u></span></div></div>').join('') + '</div></div>').join('');
   return '<div class="n2-wk n2-wkB"><div class="n2-wkB-h"><img src="' + A + 'v2_ai.svg" alt=""><span><b>Weekly Summary</b><i>· ' + wkRange(d) + '</i></span>' + n2Info + '</div>' +
     '<div class="n2-wkB-b"><p>' + WK_TXT + '</p><hr><div class="n2-wbs">' + blocks + '</div></div></div>';
 }
@@ -3234,6 +3234,19 @@ function renderStrip(d) {
   el.dataset.start = start;
   el.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => { const n = pad2(start + i); return '<button class="rp-day' + (+n === RP_TODAY ? ' today' : '') + '" data-rpday="' + n + '"><i></i><small>' + 'SMTWTFS'[i] + '</small><b>' + n + '</b></button>'; }).join('');
 }
+// Design B purple cards: the longest bar runs right up to its number (number ends at the card's inner edge, like the Figma); shorter bars scale to it
+function n2FitBars() {
+  document.querySelectorAll('.n2-wb-c').forEach(c => {
+    const rows = [...c.querySelectorAll('.n2-we')]; if (!rows.length) return;
+    const top = rows.reduce((a, e) => (+e.querySelector('.r i').dataset.f > +a.querySelector('.r i').dataset.f ? e : a), rows[0]);
+    const W = top.querySelector('.r').getBoundingClientRect().width, v = top.querySelector('.v').getBoundingClientRect().width;
+    if (!W || !v) return;
+    const L = Math.max(40, W - 8 - v);
+    rows.forEach(e => { const i = e.querySelector('.r i'); i.style.width = (L * +i.dataset.f).toFixed(1) + 'px'; });
+  });
+}
+window.addEventListener('resize', () => n2FitBars());
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => n2FitBars());
 function renderReportDay(d) {
   stopDiaryVideo();
   rpDay = d;
@@ -3245,6 +3258,7 @@ function renderReportDay(d) {
   page.scrollTop = 0;
   if (!ready) return;
   document.getElementById('rp-stats').innerHTML = n2Page(d);
+  n2FitBars();
   rpPrimeCharts();
 }
 function setDesign(des) {
