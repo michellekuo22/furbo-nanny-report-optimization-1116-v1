@@ -2818,7 +2818,7 @@ const CMP = [
 CMP.forEach(c => { const mx = Math.max(c.a.v, c.s.v), W = { act: 202, bark: 203, meow: 207 }[c.k]; [c.a, c.s].forEach(r => { r.tr = +(r.v / mx * 100).toFixed(1); r.w = Math.round(r.v / mx * W); r.trk = r.v < mx; }); });
 function n2WeekB(d) {
   const blocks = CMP.map(c => '<div class="n2-wb"><div class="n2-wb-h">' + n2Icon(c.k) + '<p>' + (t => { const k = t.indexOf(' than'); return '<b>' + t.slice(0, k) + '</b>' + t.slice(k); })(c.name + c.rest) + '</p></div><div class="n2-wb-c">' +
-    [c.a, c.s].map((r, i) => '<div class="n2-we"><span class="l' + (i ? ' m' : '') + '">' + r.l + '</span><div class="r"><i class="g' + (i ? ' s' : '') + '" style="width:' + r.w + 'px"></i><span class="v' + (i ? '' : ' hi') + '"><b>' + r.v + '</b> <u>times/day</u></span></div></div>').join('') + '</div></div>').join('');
+    [c.a, c.s].map((r, i) => '<div class="n2-we"><span class="l' + (i ? ' m' : '') + '">' + r.l + '</span><div class="r"><i class="g' + (i ? ' s' : '') + '" style="width:calc((100% - 96px) * ' + (r.tr / 100).toFixed(3) + ')"></i><span class="v' + (i ? '' : ' hi') + '"><b>' + r.v + '</b> <u>times/day</u></span></div></div>').join('') + '</div></div>').join('');
   return '<div class="n2-wk n2-wkB"><div class="n2-wkB-h"><img src="' + A + 'v2_ai.svg" alt=""><span><b>Weekly Summary</b><i>· ' + wkRange(d) + '</i></span>' + n2Info + '</div>' +
     '<div class="n2-wkB-b"><p>' + WK_TXT + '</p><hr><div class="n2-wbs">' + blocks + '</div></div></div>';
 }
