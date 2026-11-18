@@ -952,7 +952,7 @@ img { display: block; }
 .n2-hi { width: 52px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: #434343; }
 .n2-hi img { width: 40px; height: 40px; }
 
-.n2-h36 { height: 36px; }
+.n2-h36 { max-height: 36px; }   /* 36px when the sentence wraps to 2 lines (Figma); natural height when it fits on one line on wider phones */
 .n2-ed.d .n2-ed-t small { line-height: 16px; } .n2-ed.d .n2-num b { margin-bottom: -7.5px; }
 /* Design B (Figma 20141:86358): section titles live inside the white card; compact gray cards */
 .n2B .rp-sec.n2-in { margin: 0 0 10px; padding-left: 0; }
@@ -2914,7 +2914,7 @@ const dnum = (d, off) => { const dt = new Date(2026, 10, +d - off); return ['Jan
 function n2Health() {
   const log = HLOG[rpDay] || [];
   const logged = log.length ? '<div class="n2-logged"><span class="lt">Logged today</span>' + log.map(it => '<div class="n2-lrow"><img src="' + N2 + 'i_' + it.k + '.svg" alt=""><span>' + it.t + '</span>' + '<button class="n2-edit" data-hledit="' + it.id + '" aria-label="Edit"><img src="' + N2 + 'edit.svg" alt=""></button></div>').join('') + '</div>' : '';
-  return '<div class="n2-card n2-health"><b>Health Log</b><div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.svg" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
+  return '<div class="n2-card n2-health"><b>Health Log</b><div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.png" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
 }
 const VET_OPTS = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Custom dates'];
 function n2Vet() {
