@@ -964,6 +964,8 @@ img { display: block; }
 .n2B .n2-stk > .rp-sec.n2-in { margin-bottom: 0; }
 .n2B .n2-bm > .rp-sec.n2-in { margin-bottom: -2px; }
 .n2B .n2-bm > .n2-p { margin-bottom: 4px; }
+.n2-dfull { margin-top: 16px; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; }
+.n2-dfull p { margin: 0; } .n2-dfull ul { margin: 0; padding: 0 0 0 24px; list-style: disc; }
 .n2-sec.n2-g10 { gap: 10px; } .n2-sec.n2-g10 > .rp-sec { margin-bottom: 0; }
 .n2-bm .rp-soothe2 { height: 34px; }
 
@@ -2856,16 +2858,21 @@ function n2BM(d) {
 // ═══ "Current Design" (the live Nanny Report from prototype v72: Video Highlights + Activity / Barking / Meowing cards) ═══
 const RPO_CFG = [
   { sec: 'Activity', lc: '#1E7BAC', bar: '#BBD7E6', icon: [['imgEllipse165.svg', 0, 0, 35.885, 36], ['imgFrame.svg', 2.05, 2.42, 30.76, 30.86]], ti: 'imgGroup3728', line: 'imgLine101',
-    text: 'Archie was active 336 times today, 10% above the average.', tp: 10, avg: 305, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [8.64, 27.36]] },
+    text: 'Archie was active 336 times today, 10% above the average.', tp: 20, avg: 305, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [8.64, 27.36]] },
   { sec: 'Barking', lc: '#F16849', bar: '#FBD1C8', icon: [['imgGroup99.svg', 0, 0, 36, 36]], ti: 'imgGroup3729', line: 'imgLine102', soothe: true,
-    text: 'Archie was barking 35 times today, more than usual.', tp: 17, avg: 30, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [5.68, 30.32]] },
+    text: 'Archie was barking 15 times today, less than usual.', tp: 20, avg: 20, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [5.68, 30.32]] },
   { sec: 'Meowing', lc: '#F16849', bar: '#FBD1C8', icon: [['imgEllipse166.svg', 0, 0, 35.973, 36], ['imgGroup2369.svg', 1, 0.97, 35, 34.9]], ti: 'imgGroup3729', line: 'imgLine102',
-    text: 'Archie was meowing 32 times today, more than usual.', tp: 28, avg: 25, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [0.53, 35.47]] },
+    text: 'Archie was meowing 15 times today, less than usual.', tp: 20, avg: 20, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [0.53, 35.47]] },
 ];
+// Daily Diary as drawn in the Figma "Nanny Report_full page_original": video + full text with the timeline list
+function n2DiaryO() {
+  return '<div class="n2-top-grp"><div class="rp-sec">Daily Diary</div><div class="n2-card"><div class="rp-diary-media" data-play="diary"><img id="rp-diary-img" src="' + N2 + 'diary_poster.jpg" alt=""><img class="rp-dplay" src="assets/n/diary_play.svg" alt=""><video id="rp-diary-video" playsinline webkit-playsinline preload="auto"></video><img class="rp-dkebab" src="assets/n/diary_kebab.svg" alt=""></div>' +
+    '<div class="n2-dfull"><p>Today, Archie had a fun-filled day! He played, sat in the cage, and enjoyed looking out the window.</p><ul><li>Looking at the window @ 11:23AM</li><li>Running in the living room@ 12:05PM</li><li>Sleeping on his bed @ 1:23PM</li><li>Looking at the door @ 2:05PM</li><li>Chewing a toy@ 3:05PM</li></ul></div></div></div>';
+}
 function n2PageO(d) {
-  const hl = t => '<div class="rp-hl"><div class="rp-hl-media"><img src="assets/d/rp_hl1.jpg" alt=""><img class="rp-play" src="assets/d/rp_play.svg" alt=""></div><div class="rp-hl-body"><div><div class="rp-hl-title">' + t + '</div><div class="rp-hl-meta">11:23 AM<i></i>Activity</div></div><div class="rp-hl-kebab"><img src="assets/d/rp_kebab.svg" alt=""></div></div></div>';
+  const hl = (t, tm) => '<div class="rp-hl"><div class="rp-hl-media"><img src="assets/d/rp_hl1.jpg" alt=""><img class="rp-play" src="assets/d/rp_play.svg" alt=""></div><div class="rp-hl-body"><div><div class="rp-hl-title">' + t + '</div><div class="rp-hl-meta">' + tm + '<i></i>Activity</div></div><div class="rp-hl-kebab"><img src="assets/d/rp_kebab.svg" alt=""></div></div></div>';
   const lt = n2Letters(d);
-  let out = '<div class="n2-top-grp">' + n2Diary(d) + '</div><div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window') + hl('Looking out over his shoulder') + '</div></div>';
+  let out = n2DiaryO() + '<div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window', '11:23 AM') + hl('Running in the living room', '12:05 AM') + '</div></div>';
   RPO_CFG.forEach(o => {
     const bars = o.bars.map(([mt, h], i) => '<i style="left:' + RP_X[i] + 'px;top:' + mt + 'px;height:' + h + 'px;background:' + o.bar + ';--bi:' + i + '"></i>').join('');
     const lets = lt.map((l, i) => '<em class="' + (i === 6 ? 'today' : '') + '" style="left:' + RP_X[i] + 'px;top:40px;--bi:' + i + '">' + l + '</em>').join('');
