@@ -942,8 +942,6 @@ img { display: block; }
 .n2-ch em { position: absolute; width: 12px; height: 12px; text-align: center; font-style: normal; font-size: 12px; line-height: 12px; font-weight: 700; color: #A1A1A1; }
 .n2-ch em.t { color: #565656; }
 @media (prefers-reduced-motion: reduce) { .n2-ch i { transition: none !important; } .n2-ch.pre i { transform: none; } }
-.n2H .n2-fix { pointer-events: auto; -webkit-user-select: auto; user-select: auto; }
-.n2H .n2-health, .n2H .n2-vet.rp-vet { border: 0; padding: 16px; background: #fff; }   /* original (white) Health Log / Vet Brief, interactive */
 .n2-fix { display: flex; flex-direction: column; gap: 12px; pointer-events: none; -webkit-user-select: none; user-select: none; }  /* static: Health Log + Vet Brief have no interactions */
 /* Health Log + Vet Brief: purple card style (Figma: white + 20% gradient fill, 30% gradient stroke) */
 .n2-health, .n2-vet.rp-vet { border: .5px solid transparent; padding: 15.5px;
@@ -2889,7 +2887,7 @@ function n2PageO(d) {
 }
 function n2Page(d) {
   if (RP_DESIGN === 'O') return n2PageO(d);
-  const A_ = RP_DESIGN === 'A' || RP_DESIGN === 'H', wk = +d === WK_DAY && PREMIUM;     // weekly summary (+ purple comparison cards) only on Sun 11/15, and only with Premium on
+  const A_ = RP_DESIGN === 'A', wk = +d === WK_DAY && PREMIUM;     // weekly summary (+ purple comparison cards) only on Sun 11/15, and only with Premium on
   const top = wk ? '<div class="n2-top-grp">' + n2Diary(d) + (A_ ? n2WeekA(d) : n2WeekB(d)) + '</div>' : '<div class="n2-top-grp">' + n2Diary(d) + '</div>';
   const B_ = !A_, sec = (t, inner, cls) => B_ ? '<div class="n2-sec">' + n2InCard(t, inner) + '</div>' : n2Sec(t, inner, cls);
   const ed = sec('Eating &amp; Drinking', n2ED(d));
@@ -2897,7 +2895,7 @@ function n2Page(d) {
                        : sec('Activity', '<div class="n2-card n2-stk">' + n2Act(d) + '</div>');
   const bm = A_ && wk ? n2Sec('Barking &amp; Meowing', n2Cmp([CMP[1], CMP[2]]) + '<div class="n2-card n2-stk n2-bm">' + n2BM(d) + '</div>', 'n2-gap16 n2-g10')
                       : sec('Barking &amp; Meowing', '<div class="n2-card n2-stk n2-bm">' + n2BM(d) + '</div>');
-  return '<div class="n2' + (B_ ? ' n2B' : '') + (RP_DESIGN === 'H' ? ' n2H' : '') + '">' + top + ed + act + bm + (PREMIUM ? '<div class="n2-fix"' + (RP_DESIGN === 'H' ? '' : ' inert') + '>' + n2Health() + n2Vet() + '</div>' : '') + '</div>';
+  return '<div class="n2' + (B_ ? ' n2B' : '') + '">' + top + ed + act + bm + (PREMIUM ? '<div class="n2-fix" inert>' + n2Health() + n2Vet() + '</div>' : '') + '</div>';
 }
 
 // ═══ Health Log + Vet Brief (Figma "Claude Vet Brief") ═══
@@ -2916,11 +2914,11 @@ const dnum = (d, off) => { const dt = new Date(2026, 10, +d - off); return ['Jan
 function n2Health() {
   const log = HLOG[rpDay] || [];
   const logged = log.length ? '<div class="n2-logged"><span class="lt">Logged today</span>' + log.map(it => '<div class="n2-lrow"><img src="' + N2 + 'i_' + it.k + '.svg" alt=""><span>' + it.t + '</span>' + '<button class="n2-edit" data-hledit="' + it.id + '" aria-label="Edit"><img src="' + N2 + 'edit.svg" alt=""></button></div>').join('') + '</div>' : '';
-  return '<div class="n2-card n2-health"><b>Health Log</b><div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + (RP_DESIGN === 'H' ? '_old.svg' : '.png') + '" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
+  return '<div class="n2-card n2-health"><b>Health Log</b><div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.png" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
 }
 const VET_OPTS = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Custom dates'];
 function n2Vet() {
-  return '<div class="rp-vet n2-vet"><div class="t"><b>Vet Brief</b><span>Share Archie’s trend and logs to your vet.</span></div><div class="r"><button class="rp-sel" data-vetsel><img src="' + (RP_DESIGN === 'H' ? A + 'imgTrailingCalendar.svg' : N2 + 'cal_blue.svg') + '" alt="" width="24" height="24"><span>' + (VET_OPT === 'Custom dates' ? (VET_RNG.s ? rngLabel(VET_RNG) : 'Select dates') : VET_OPT) + '</span><img src="' + A + 'imgExpand.svg" alt="" width="16" height="16"></button><button class="rp-gen" data-vetgen>Generate</button></div>' +
+  return '<div class="rp-vet n2-vet"><div class="t"><b>Vet Brief</b><span>Share Archie’s trend and logs to your vet.</span></div><div class="r"><button class="rp-sel" data-vetsel><img src="' + N2 + 'cal_blue.svg" alt="" width="24" height="24"><span>' + (VET_OPT === 'Custom dates' ? (VET_RNG.s ? rngLabel(VET_RNG) : 'Select dates') : VET_OPT) + '</span><img src="' + A + 'imgExpand.svg" alt="" width="16" height="16"></button><button class="rp-gen" data-vetgen>Generate</button></div>' +
     (VET_OPT === 'Custom dates' ? cdMarkup() : '') + '<div class="n2-dd">' + VET_OPTS.map(o => '<button class="' + (o === VET_OPT ? 'sel' : '') + '" data-vetopt="' + o + '">' + o + '</button>').join('') + '</div></div>';
 }
 // ── Health Log sheet ──
@@ -3387,7 +3385,6 @@ document.addEventListener('touchmove', function(e) { if (e.touches.length > 1) e
   <button data-d="O">Current Design</button>
   <button data-d="A" class="on">Design A</button>
   <button data-d="B">Design B</button>
-  <button data-d="H">Health Log / Vet Brief</button>
   <div class="prem" style="display:flex"><span><b>Premium features</b></span><button class="sw on" id="prem-sw" aria-label="Premium features"><i></i></button></div>
 </aside>
 <script>
