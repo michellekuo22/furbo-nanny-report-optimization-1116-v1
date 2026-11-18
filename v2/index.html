@@ -2865,7 +2865,7 @@ const RPO_CFG = [
 function n2PageO(d) {
   const hl = t => '<div class="rp-hl"><div class="rp-hl-media"><img src="assets/d/rp_hl1.jpg" alt=""><img class="rp-play" src="assets/d/rp_play.svg" alt=""></div><div class="rp-hl-body"><div><div class="rp-hl-title">' + t + '</div><div class="rp-hl-meta">11:23 AM<i></i>Activity</div></div><div class="rp-hl-kebab"><img src="assets/d/rp_kebab.svg" alt=""></div></div></div>';
   const lt = n2Letters(d);
-  let out = '<div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window') + hl('Looking out over his shoulder') + '</div></div>';
+  let out = '<div class="n2-top-grp">' + n2Diary(d) + '</div><div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window') + hl('Looking out over his shoulder') + '</div></div>';
   RPO_CFG.forEach(o => {
     const bars = o.bars.map(([mt, h], i) => '<i style="left:' + RP_X[i] + 'px;top:' + mt + 'px;height:' + h + 'px;background:' + o.bar + ';--bi:' + i + '"></i>').join('');
     const lets = lt.map((l, i) => '<em class="' + (i === 6 ? 'today' : '') + '" style="left:' + RP_X[i] + 'px;top:40px;--bi:' + i + '">' + l + '</em>').join('');
