@@ -2852,7 +2852,34 @@ function n2BM(d) {
     '<div class="rp-soothe2"><img src="' + A + 'B2_soothe.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>';
 }
 // ── Health log ──
+
+// ═══ "Current Design" (the live Nanny Report from prototype v72: Video Highlights + Activity / Barking / Meowing cards) ═══
+const RPO_CFG = [
+  { sec: 'Activity', lc: '#1E7BAC', bar: '#BBD7E6', icon: [['imgEllipse165.svg', 0, 0, 35.885, 36], ['imgFrame.svg', 2.05, 2.42, 30.76, 30.86]], ti: 'imgGroup3728', line: 'imgLine101',
+    text: 'Archie was active 336 times today, 10% above the average.', tp: 10, avg: 305, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [8.64, 27.36]] },
+  { sec: 'Barking', lc: '#F16849', bar: '#FBD1C8', icon: [['imgGroup99.svg', 0, 0, 36, 36]], ti: 'imgGroup3729', line: 'imgLine102', soothe: true,
+    text: 'Archie was barking 35 times today, more than usual.', tp: 17, avg: 30, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [5.68, 30.32]] },
+  { sec: 'Meowing', lc: '#F16849', bar: '#FBD1C8', icon: [['imgEllipse166.svg', 0, 0, 35.973, 36], ['imgGroup2369.svg', 1, 0.97, 35, 34.9]], ti: 'imgGroup3729', line: 'imgLine102',
+    text: 'Archie was meowing 32 times today, more than usual.', tp: 28, avg: 25, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [0.53, 35.47]] },
+];
+function n2PageO(d) {
+  const hl = t => '<div class="rp-hl"><div class="rp-hl-media"><img src="assets/d/rp_hl1.jpg" alt=""><img class="rp-play" src="assets/d/rp_play.svg" alt=""></div><div class="rp-hl-body"><div><div class="rp-hl-title">' + t + '</div><div class="rp-hl-meta">11:23 AM<i></i>Activity</div></div><div class="rp-hl-kebab"><img src="assets/d/rp_kebab.svg" alt=""></div></div></div>';
+  const lt = n2Letters(d);
+  let out = '<div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window') + hl('Looking out over his shoulder') + '</div></div>';
+  RPO_CFG.forEach(o => {
+    const bars = o.bars.map(([mt, h], i) => '<i style="left:' + RP_X[i] + 'px;top:' + mt + 'px;height:' + h + 'px;background:' + o.bar + ';--bi:' + i + '"></i>').join('');
+    const lets = lt.map((l, i) => '<em class="' + (i === 6 ? 'today' : '') + '" style="left:' + RP_X[i] + 'px;top:40px;--bi:' + i + '">' + l + '</em>').join('');
+    out += '<div><div class="rp-sec">' + o.sec + '</div><div class="rp-card rp-n' + (o.soothe ? ' has-soothe' : '') + '"><div class="rp-n-main"><div class="rp-n-top"><div class="rp-n-head">' +
+      '<div class="rp-ic">' + o.icon.map(([f, l, t, w, h]) => '<img src="' + A + f + '" alt="" style="left:' + l + 'px;top:' + t + 'px;width:' + w + 'px;height:' + h + 'px">').join('') + '</div><p>' + o.text + '</p></div>' +
+      '<div class="rp-ch"><div class="rpO-top"><b style="color:' + o.lc + '">Last 7 days</b><span class="rpO-tr"><img src="' + A + o.ti + '.svg" alt="">' + o.tp + '% from last week</span></div>' +
+      '<div class="rp-ch-row"><div class="rp-avg2" style="color:' + o.lc + '"><div class="n" style="gap:4px"><b>' + o.avg + '</b><small style="margin-top:8.5px">times</small></div><span>Average</span></div>' +
+      '<div class="rp-bars2" style="height:56px">' + bars + lets + '<img class="avgline" src="' + A + o.line + '.svg" alt="" style="top:13.26px"></div></div></div></div>' +
+      (o.soothe ? '<div class="rp-soothe2"><img src="' + A + 'imgGroup4313.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>' : '') + '</div></div></div>';
+  });
+  return '<div class="n2 n2O">' + out + '</div>';
+}
 function n2Page(d) {
+  if (RP_DESIGN === 'O') return n2PageO(d);
   const A_ = RP_DESIGN === 'A', wk = +d === WK_DAY && PREMIUM;     // weekly summary (+ purple comparison cards) only on Sun 11/15, and only with Premium on
   const top = wk ? '<div class="n2-top-grp">' + n2Diary(d) + (A_ ? n2WeekA(d) : n2WeekB(d)) + '</div>' : '<div class="n2-top-grp">' + n2Diary(d) + '</div>';
   const B_ = !A_, sec = (t, inner, cls) => B_ ? '<div class="n2-sec">' + n2InCard(t, inner) + '</div>' : n2Sec(t, inner, cls);
@@ -3191,7 +3218,7 @@ function rpPrimeCharts() {
   rpChartIO = new IntersectionObserver(es => es.forEach(en => {
     if (en.isIntersecting) { requestAnimationFrame(() => requestAnimationFrame(() => en.target.classList.remove('pre'))); rpChartIO.unobserve(en.target); }
   }), { threshold: .35 });
-  root.querySelectorAll('.n2-ch, .n2-cg, .n2-wb-c').forEach(ch => { ch.classList.add('pre'); rpChartIO.observe(ch); });
+  root.querySelectorAll('.n2-ch, .n2-cg, .n2-wb-c, .rp-bars2').forEach(ch => { ch.classList.add('pre'); rpChartIO.observe(ch); });
 }
 
 function renderStrip(d) {
@@ -3334,6 +3361,7 @@ document.addEventListener('touchmove', function(e) { if (e.touches.length > 1) e
 </script>
 <button id="dp-toggle" aria-label="Show designs">Designs</button>
 <aside id="design-panel" aria-label="Design versions"><h4>Nanny Report Optimization</h4>
+  <button data-d="O">Current Design</button>
   <button data-d="A" class="on">Design A</button>
   <button data-d="B">Design B</button>
   <div class="prem" style="display:flex"><span><b>Premium features</b></span><button class="sw on" id="prem-sw" aria-label="Premium features"><i></i></button></div>
