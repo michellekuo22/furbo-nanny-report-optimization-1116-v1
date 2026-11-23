@@ -2782,11 +2782,12 @@ const DD_DIARY = [
 const ddRnd = seed => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
 // Figma "Nanny Report Optimization Revised": 11/24 (Everyday) and 11/21 (Saturday) are the drawn frames; other days get their own numbers
 const BASE = {
-  24: { act: { n: 290, avg: 305, pct: 10, up: false, sim: 350 }, eat: { n: 6, avg: 7, pct: 14, up: false }, drink: { n: 12, avg: 10, pct: 17, up: true },
-        bark: { n: 35, avg: 40, pct: 10, up: true, sim: 22 }, wp: { act: -12, eat: -14, drink: 17, bark: 15 },
+  24: { act: { n: 290, avg: 305, pct: 12, up: false, sim: 350 }, eat: { n: 6, avg: 7, pct: 14, up: false }, drink: { n: 12, avg: 10, pct: 17, up: true },
+        bark: { n: 35, avg: 40, pct: 15, up: true, sim: 22 },
         wk: 'Archie was <b>less active by 12%</b> than usual this week. He also <b>ate less often by 14%</b>, <b>drank more often by 17%</b>, and <b>barked 15% more than usual</b>.' },
-  21: { act: { n: 296, avg: 303, pct: 10, up: false, sim: 350 }, eat: { n: 9, avg: 7, pct: 14, up: false }, drink: { n: 13, avg: 10, pct: 17, up: true },
-        bark: { n: 25, avg: 40, pct: 10, up: true, sim: 22 } },
+  21: { act: { n: 296, avg: 303, pct: 20, up: false, sim: 350 }, eat: { n: 9, avg: 7, pct: 30, up: true }, drink: { n: 13, avg: 10, pct: 17, up: true },
+        bark: { n: 25, avg: 40, pct: 10, up: true, sim: 22 },
+        wk: 'Archie <b>ate 30% more</b> and <b>moved 20% less</b> this week. Cooler weather or extra treats are common reasons.' },
 };
 const DIARY_BASE = 'Today, Archie had a fun-filled day! He played, sat in the cage, and enjoyed looking out the window.';
 function dayData(d) {
@@ -2798,7 +2799,6 @@ function dayData(d) {
     x.act = { n: pick(230, 380), avg: pick(280, 330), pct: pick(4, 18), sim: 350 }; x.bark = { n: pick(15, 60), avg: pick(30, 48), pct: pick(4, 20), sim: 22 };
     [x.eat, x.drink, x.act, x.bark].forEach(o => { o.up = o.n >= o.avg; });   // chip colour always agrees with the "more / less than usual" wording
     x.diary = DD_DIARY[(n * 3 + 1) % DD_DIARY.length];
-    x.wp = {}; ['act', 'eat', 'drink', 'bark'].forEach(k => { x.wp[k] = (x[k].n >= x[k].avg ? 1 : -1) * pick(3, 30); });   // weekly change vs usual (signed %)
   }
   [x.act, x.bark].forEach(o => { const m = Math.max(o.n, o.sim); o.fa = o.n / m; o.fs = o.sim / m; });   // bar lengths are proportional to the numbers (longest bar = full track)
   x.jit = n;
@@ -2831,17 +2831,17 @@ function wkRange(d) {
   const e = new Date(2026, 10, +d), s = new Date(2026, 10, +d - 6), f = dt => MONN[dt.getMonth()] + ' ' + dt.getDate();
   return s.getMonth() === e.getMonth() ? f(s) + '–' + e.getDate() : f(s) + '–' + f(e);
 }
-const WK_SAT = 'Archie <b>ate 30% more</b> and <b>moved 20% less</b> this week. Cooler weather or extra treats are common reasons.';
 const WK_TIP = '<span class="n2-tip">💡<b>Tip:</b> A puzzle toy or snuffle mat can keep him busy and slow down snacking.</span>';
 const isSat = d => new Date(2026, 10, +d).getDay() === 6;
 function n2Week(d) {
   const D = dayData(d), sat = isSat(d);
-  // only changes above 10% are worth mentioning
+  // the % in the summary are the same numbers as the "% from last week" labels on each section; only changes above 10% are worth mentioning
   const W = { act: 'moved', eat: 'ate', drink: 'drank', bark: 'barked' };
-  const items = ['act', 'eat', 'drink', 'bark'].filter(k => D.wp && Math.abs(D.wp[k]) > 10).map(k => '<b>' + W[k] + ' ' + Math.abs(D.wp[k]) + '% ' + (D.wp[k] < 0 ? 'less' : 'more') + '</b>');
+  const items = ['act', 'eat', 'drink', 'bark'].filter(k => D[k].pct > 10).map(k => '<b>' + W[k] + ' ' + D[k].pct + '% ' + (D[k].up ? 'more' : 'less') + '</b>');
   const list = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' and ' + a[a.length - 1];
-  const txt = sat ? WK_SAT + '<br><br>' + WK_TIP : D.wk ? D.wk : !items.length ? 'Archie’s week was steady, with no big changes from usual.' :
+  const body = D.wk ? D.wk : !items.length ? 'Archie’s week was steady, with no big changes from usual.' :
     'Archie ' + items[0] + ' than usual this week.' + (items.length > 1 ? ' He also ' + list(items.slice(1)) + '.' : '');
+  const txt = body + (sat ? '<br><br>' + WK_TIP : '');
   return '<div class="n2-wk n2-wkA"><div class="n2-wk-h"><div class="l"><span>Weekly Summary<i> · ' + wkRange(d) + '</i></span><em class="n2-beta">BETA</em></div>' + n2Info + '</div><p>' + txt + '</p><img class="n2-spark" src="' + N2 + 'sparkle.svg" alt=""></div>';
 }
 const BETA = ' <em class="n2-beta">BETA</em>';
