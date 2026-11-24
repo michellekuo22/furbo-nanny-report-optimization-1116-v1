@@ -2858,7 +2858,7 @@ function dayData(d) {
     x.diary = Object.assign({}, DD_DIARY[(n * 3 + 1) % DD_DIARY.length]);
   }
   [x.act, x.bark].forEach(o => { const m = Math.max(o.n, o.sim); o.fa = o.n / m; o.fs = o.sim / m; });   // bar lengths are proportional to the numbers (longest bar = full track)
-  x.diary.poster = N2 + 'diary_' + (((n - 24) % 5 + 5) % 5 + 1) + '.jpg'; x.diary.vid = 'live';   // thumbnail rotates through the 5 stills; every day plays the same clip as 11/24
+  x.diary.poster = N2 + 'diary_' + (n === 21 ? 5 : ((n - 24) % 5 + 5) % 5 + 1) + '.jpg'; x.diary.vid = 'live';   // thumbnails rotate through the 5 stills (11/21 uses #5, the dog is large in frame); every day plays the same clip as 11/24
   if (new Date(2026, 10, n).getDay() === 4) x.diary = Object.assign({}, x.diary, { txt: DIARY_THU });
   x.jit = n;
   return x;
