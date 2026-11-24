@@ -1278,6 +1278,22 @@ img { display: block; }
 .vb-same { font-size: 10px; line-height: 10px; font-weight: 700; color: #7C7C7C; padding: 3px 6px; border-radius: 8px; background: #F0F0F0; }
 .hl-add { align-self: flex-start; height: 40px; padding: 0 14px 0 10px; border-radius: 12px; border: 1px solid rgba(67,67,67,.3); display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #434343; background: transparent; }
 #design-panel .dp-lab { margin: 10px 2px 0; font-size: 11px; line-height: 14px; font-weight: 700; letter-spacing: .02em; color: #8a8a8a; text-transform: uppercase; }
+
+/* Vet Brief: Figma "7 day-Health Report-2" (Key Observation + compact trend rows) */
+.vb3 { padding: 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 16px; background: #fff; }
+.vb3-ko { position: relative; padding: 12px 16px; border-radius: 16px; display: flex; flex-direction: column; gap: 8px;
+  background: linear-gradient(157.5deg, rgba(218,180,250,.2), rgba(161,208,251,.2)), #fff; }
+.vb3-ko .t { font-size: 14px; line-height: 20px; font-weight: 700; color: #5170D7; }
+.vb3-ko p { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; margin: 0; padding-right: 0; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; }
+.vb3-ko p b { font-weight: 700; }
+.vb3-ko .sp { position: absolute; right: 9px; bottom: 9px; width: 20px; height: 20px; opacity: .5; }
+.vb3-r { display: flex; flex-direction: column; gap: 8px; padding: 6px 0; }
+.vb3-r.a { gap: 2px; }
+.vb3-r .l { display: flex; align-items: center; justify-content: space-between; }
+.vb3-r .l b { font-size: 14px; line-height: 20px; font-weight: 700; color: #AE8A79; }
+.vb3-r p { margin: 0; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; }
+.vb3 hr { border: 0; height: 1px; margin: 0; background: #ECECEC; }
+.vb3 small { display: block; font-size: 12px; line-height: 16px; color: #696969; }
 </style>
 </head>
 <body>
@@ -2885,7 +2901,7 @@ function n2Diary(d) {
     '<div class="n2-dtext" data-dtext><p>' + dy.txt + '</p><img src="' + N2 + 'chev.svg" alt=""></div></div>';
 }
 // ── Weekly summary (every day; Saturday adds a tip) ──
-const MONN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONN = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 function wkRange(d) {
   const e = new Date(2026, 10, +d), s = new Date(2026, 10, +d - 6), f = dt => MONN[dt.getMonth()] + ' ' + dt.getDate();
   return s.getMonth() === e.getMonth() ? f(s) + '–' + e.getDate() : f(s) + '–' + f(e);
@@ -3236,6 +3252,19 @@ function vbRange() {   // inclusive [start, end] as Date objects + length
   const e = new Date(2026, 10, cust ? VET_RNG.e : +rpDay), s = new Date(2026, 10, cust ? VET_RNG.s : +rpDay - (n - 1));   // presets end on the day you are viewing (Last 7 days of 11/21 = 11/15 – 11/21)
   return { s, e, n };
 }
+function vbTrendsN(d, n) {   // 14 / 30 / custom days: its own numbers per end day + length (so the periods differ from each other and from the 7 days)
+  const r = ddRnd(d * 977 + n * 31 + 7), pick = (lo, hi) => lo + Math.round(r() * (hi - lo));
+  const mk = (name, lo, hi, avgLo, avgHi) => { const pct = pick(2, 22), dir = r() < .5 ? 'up' : 'down'; return { name, pct, ar: pct <= 3 ? null : dir, avg: pick(avgLo, avgHi) }; };
+  const A = mk('Activity', 0, 0, 280, 330), E = mk('Eating', 0, 0, 5, 8), W = mk('Drinking', 0, 0, 8, 12), K = mk('Barking', 0, 0, 30, 48);
+  const sim = (name, w1, w2) => { const p = pick(3, 28), lo = r() < .5; return ' ' + p + '% ' + (lo ? w1 : w2) + ' than similar pets.'; };
+  const sA = sim('a', 'less active', 'more active'), sK = pick(3, 40) + '% ' + (r() < .5 ? 'more' : 'less') + ' than similar pets.';
+  return [
+    ['Activity', A.ar, A.pct, (A.ar === 'up' ? 'More' : 'Less') + ' active than usual, average ' + A.avg + ' times/day.' + sA],
+    ['Eating', E.ar, E.pct, 'Eating ' + (E.ar === 'up' ? 'more' : 'less') + ' than usual, average ' + E.avg + ' times/day'],
+    ['Drinking', W.ar, W.pct, 'Drinking ' + (W.ar === 'up' ? 'more' : 'less') + ' than usual, average ' + W.avg + ' times/day.'],
+    ['Barking', K.ar, K.pct, 'Barking ' + (K.ar === 'up' ? 'more' : 'less') + ' than usual, average ' + K.avg + ' times/day. Barks ' + sK],
+  ];
+}
 function vbTrends7(d) {   // same numbers as the report for that day (labels, weekly summary): "% from last week" = vs. the 7 days before
   const D = dayData(d), a = D.act, e = D.eat, w = D.drink, b = D.bark, ar = o => o.up ? 'up' : 'down', rel = (x, y) => Math.round(Math.abs(x - y) / y * 100);
   const sim = (o, w1, w2) => { const p = rel(o.n, o.sim); return p ? ' ' + p + '% ' + (o.n < o.sim ? w1 : w2) + ' than similar pets.' : ''; };
@@ -3252,10 +3281,10 @@ function vbData() {
     Object.keys(HLOG).flatMap(dk => (HLOG[dk] || []).map(it => ({ dt: new Date(2026, 10, +dk), k: it.k, t: it.t })))).filter(x => x.dt >= s && x.dt <= e).sort((a, b) => a.dt - b.dt);
   const pe = new Date(s - day), ps = new Date(+pe - (n - 1) * day), cmp = md(ps) + '-' + md(pe);
   const fam = n <= 10 ? 7 : n <= 21 ? 14 : 30;
-  const trends = (fam === 7 && n === 7 ? vbTrends7(+rpDay) : VB_TR[fam]).map(([t, ar, pct, d]) => [t, ar, ar ? pct + '% vs. ' + cmp : 'Usual', d]);
+  const trends = (n === 7 ? vbTrends7(+rpDay) : vbTrendsN(e.getDate() + e.getMonth() * 31, n)).map(([t, ar, pct, d]) => [t, ar, ar ? pct + '% vs. ' + cmp : 'Usual', d]);
   const all = notes.map(x => [md(x.dt), x.k, x.t]);
   const capped = all.length > 10 ? Array.from({ length: 10 }, (_, i) => all[Math.round(i * (all.length - 1) / 9)]) : all;   // 10 notes max, spread across the period
-  return { notes: capped, trends, s, e, n, cmp };
+  return { notes: capped, trends, s, e, n, cmp, ps, pe };
 }
 const vbDate = d => ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][d.getMonth()] + ' ' + pad2(d.getDate()) + ', ' + d.getFullYear();
 let VB_LAYOUT = 'r2';   // DRAFT: 'cards' = behavior trends as cards on top, notes at the bottom; 'orig' = notes first
@@ -3271,15 +3300,49 @@ function vbRich(t, joiner) {   // Figma "7 day-Health Report-2": bold lead phras
   return t.split(/(?<=\.)\s+/).map(sn => { const i = sn.indexOf(' than similar pets'); if (i > 0) return '<b>' + vbEsc(sn.slice(0, i)) + '</b>' + vbEsc(sn.slice(i));
     const c = sn.indexOf(','); if (c > 0) return '<b>' + vbEsc(sn.slice(0, c)) + '</b>' + vbEsc(sn.slice(c)); return vbEsc(sn); }).join(joiner || '<br>');
 }
+const VB_MO = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+const vbRng = (a, b) => a.getMonth() === b.getMonth() ? VB_MO[a.getMonth()] + ' ' + a.getDate() + '-' + b.getDate() + ', ' + b.getFullYear() : VB_MO[a.getMonth()] + ' ' + a.getDate() + '-' + VB_MO[b.getMonth()] + ' ' + b.getDate() + ', ' + b.getFullYear();
+function vbObs(D) {   // Key Observation: plain wording, no numbers (7 days = the Figma sentence); 14 / 30 days / custom read differently. Built from the same rows (chips) listed below. <= 4 lines.
+  const tr = n => D.trends.find(t => t[0] === n) || [], a = n => tr(n)[1] || null, pc = n => parseInt(tr(n)[2]) || 0, mv = n => a(n) === 'up' ? 'more' : 'less';
+  const B = x => '<b>' + x + '</b>';
+  const f7 = D.n === 7, f14 = D.n === 14, f30 = D.n === 30;
+  if (f7) {
+    const act = a('Activity') ? mv('Activity') + ' active than usual' : 'as active as usual';
+    const e = a('Eating'), d = a('Drinking');
+    const ed = !e && !d ? 'eating and drinking about the same' : e && e === d ? 'eating and drinking ' + mv('Eating') + ' frequently' : e && d ? 'eating ' + mv('Eating') + ' but drinking ' + mv('Drinking') : e ? 'eating ' + mv('Eating') + ' and drinking steady' : 'drinking ' + mv('Drinking') + ' and eating steady';
+    const bk = a('Barking') ? B('Barking also ' + (a('Barking') === 'up' ? 'increased' : 'decreased')) + ' compared to the previous week.' : B('Barking stayed about the same') + ' compared to the previous week.';
+    return 'Archie was ' + B(act) + ' this week, while ' + B(ed) + '. ' + bk;
+  }
+  const q = n => pc(n) >= 15 ? 'noticeably ' : pc(n) <= 6 ? 'slightly ' : '';          // size of the activity change, in words
+  const dn = n => a(n) === 'up' ? 'up' : 'down';
+  const e = a('Eating'), d = a('Drinking');
+  const edUp = !e && !d ? 'eating and drinking steady' : e && e === d ? 'eating and drinking both ' + dn('Eating') : e && d ? 'eating ' + dn('Eating') + ' but drinking ' + dn('Drinking') : e ? 'eating ' + dn('Eating') + ' and drinking steady' : 'drinking ' + dn('Drinking') + ' and eating steady';
+  const prev = f14 ? 'the prior 2 weeks' : f30 ? 'last month' : 'the prior ' + D.n + ' days';
+  if (f30) {
+    const act = a('Activity') ? 'Archie’s activity trended ' + B(q('Activity') + (a('Activity') === 'up' ? 'higher' : 'lower') + ' than usual') : 'Archie’s activity ' + B('stayed level');
+    const ed2 = !e && !d ? 'Eating and drinking ' + B('stayed level') : e && e === d ? 'Eating and drinking were both ' + B(dn('Eating')) : e && d ? 'Eating was ' + B(dn('Eating')) + ' and drinking ' + B(dn('Drinking')) : e ? 'Eating was ' + B(dn('Eating')) + ' and drinking ' + B('level') : 'Drinking was ' + B(dn('Drinking')) + ' and eating ' + B('level');
+    return 'Over the past month, ' + act + '. ' + ed2 + '. ' + (a('Barking') ? 'Barking ' + B(a('Barking') === 'up' ? 'climbed' : 'eased') : 'Barking ' + B('held level')) + ' vs. ' + prev + '.';
+  }
+  const act = a('Activity') ? B(q('Activity') + mv('Activity') + ' active than usual') : B('as active as usual');
+  const per = f14 ? 'over two weeks' : 'over ' + D.n + ' days';
+  return 'Archie has been ' + act + ' ' + per + ', with ' + B(edUp) + '. ' + (a('Barking') ? B('Barking also ' + (a('Barking') === 'up' ? 'increased' : 'decreased')) : B('Barking held steady')) + ' vs. ' + prev + '.';
+}
+function vbTrends3(D) {   // Figma "7 day-Health Report-2": Key Observation + compact rows + "Compared with ..." footnote
+  const obs = '<div class="vb3-ko"><b class="t">Key Observation</b><p>' + vbObs(D) + '</p><img class="sp" src="' + N2 + 'sparkle.svg" alt=""></div>';
+  const rows = D.trends.map(([t, a, r, txt]) => {
+    const chip = a ? '<span class="n2-chip ' + (a === 'up' ? 'up' : 'dn') + '"><img src="' + N2 + (a === 'up' ? 'play_green' : 'play_red') + '.svg" alt=""><em>' + r.split(' ')[0] + '</em></span>' : '<span class="vb-same">Usual</span>';
+    const avg = (txt.match(/average (\d+) times\/day/) || [])[1], sim = (txt.split(/(?<=\.)\s+/).find(x => x.indexOf('than similar pets') > 0) || '');
+    return '<div class="vb3-r' + (t === 'Activity' ? ' a' : '') + '"><div class="l"><b>' + t + '</b>' + chip + '</div><p>' + (avg ? avg + ' times/day' : '') + (sim ? '<br>' + vbEsc(sim) : '') + '</p></div>';
+  }).join('<hr>');
+  return '<div class="vb-lab">Behavior Trends</div><div class="vb-card vb3">' + obs + rows + '<hr><small>Compared with ' + vbRng(D.ps, D.pe) + '</small></div>';
+}
 function vbR2(D, per) {
   const MO = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
-  const rng = D.s.getMonth() === D.e.getMonth() ? MO[D.s.getMonth()] + ' ' + D.s.getDate() + ' - ' + D.e.getDate() + ', ' + D.e.getFullYear() : MO[D.s.getMonth()] + ' ' + D.s.getDate() + ' - ' + MO[D.e.getMonth()] + ' ' + D.e.getDate() + ', ' + D.e.getFullYear();
+  const rng = vbRng(D.s, D.e);
   document.getElementById('vb-h3').textContent = 'Vet Brief';
   document.getElementById('vb-dt2').innerHTML = '<img src="' + N2 + 'cal_blue.svg" alt=""><b>' + rng + '</b>';
   const pet = '<div class="vb-pet"><div class="ph"><img src="' + N2 + 'vb_archie.jpg" alt="Archie"></div><div class="inf"><div class="g1"><b class="nm">Archie</b><div class="mt"><span>Maltipoo</span><i></i><span>2y 3m</span><i></i><span>4.2 kg</span></div></div><div class="g2"><p><b>Health:</b> Allergies, scratching furniture, urinary tract issues</p><p><b>Dietary:</b> Dry food</p></div></div></div>';
-  const trends = '<div class="vb-lab">Behavior Trends (' + per + ')</div><div class="vb-card vb-t2 r2">' + D.trends.map(([t, ar, r, d]) => {
-    const chip = ar ? '<span class="n2-chip ' + (ar === 'up' ? 'up' : 'dn') + '"><img src="' + N2 + (ar === 'up' ? 'play_green' : 'play_red') + '.svg" alt=""><em>' + r + '</em></span>' : '<span class="vb-same">Usual</span>';
-    return '<div class="vb-s"><div class="l"><b>' + t + '</b>' + chip + '</div><p>' + vbRich(d, t === 'Barking' || t === 'Meowing' ? ' ' : '<br>') + '</p></div>'; }).join('') + '</div>';
+  const trends = vbTrends3(D);
   const groups = []; D.notes.forEach(([d, k, t]) => { let g = groups[groups.length - 1]; if (!g || g.d !== d) groups.push(g = { d, items: [] }); g.items.push([k, t.indexOf(':') < 0 ? t : t.slice(t.indexOf(':') + 1).trim()]); });
   const notes = '<div class="vb-lab">Pet notes</div><div class="vb-card vb-tl">' + (groups.length ? groups.map(g => '<div class="tg"><div class="dt">' + g.d + '</div><div class="ln"><i></i></div><div class="en">' + g.items.map(([k, v]) => '<div class="er"><img src="' + N2 + 'i_' + k + '.png" alt=""><span>' + vbEsc(v) + '</span></div>').join('') + '</div></div>').join('') : '<div class="er"><span>No logs in this period.</span></div>') + '</div>';
   return pet + trends + notes;
