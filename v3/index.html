@@ -942,7 +942,7 @@ img { display: block; }
 .n2-ch em { position: absolute; width: 12px; height: 12px; text-align: center; font-style: normal; font-size: 12px; line-height: 12px; font-weight: 700; color: #A1A1A1; }
 .n2-ch em.t { color: #565656; }
 @media (prefers-reduced-motion: reduce) { .n2-ch i { transition: none !important; } .n2-ch.pre i { transform: none; } }
-.n2-fix { display: flex; flex-direction: column; gap: 12px; pointer-events: none; -webkit-user-select: none; user-select: none; }  /* static: Health Log + Vet Brief have no interactions */
+.n2-fix { display: flex; flex-direction: column; gap: 12px; }  /* static: Health Log + Vet Brief have no interactions */
 /* Health Log + Vet Brief: purple card style (Figma: white + 20% gradient fill, 30% gradient stroke) */
 .n2-health, .n2-vet.rp-vet { border: .5px solid transparent; padding: 15.5px;
   background: linear-gradient(151deg, rgba(218,180,250,.2), rgba(161,208,251,.2)) padding-box, linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, rgba(155,117,251,.3), rgba(81,151,216,.3)) border-box; }
@@ -1222,6 +1222,62 @@ img { display: block; }
   #design-panel { display: none; left: 12px; right: 12px; top: calc(12px + env(safe-area-inset-top, 0px)); width: auto; max-height: calc(100dvh - 24px); overflow-y: auto; z-index: 10001; }
   #design-panel.open { display: flex; }
 }
+
+/* ===== Health Log + Vet Brief (ported from the vet-brief prototype v3) ===== */
+.n2H .n2-fix { pointer-events: auto; -webkit-user-select: auto; user-select: auto; }
+.n2-health .n2-hh { display: flex; align-items: center; justify-content: space-between; min-height: 20px; }
+.n2-health .n2-hh b { font-size: 14px; line-height: 20px; font-weight: 700; color: #434343; }
+.n2-logged .lh { display: flex; align-items: center; justify-content: space-between; min-height: 16px; }
+.n2-eall { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin: -4px -4px -4px 0; padding: 0; border-radius: 50%; background: rgba(255,255,255,.75); flex: none; cursor: pointer; }
+.n2-eall img { width: 16px; height: 16px; }
+.n2-eall.pill { width: auto; height: 28px; margin: -4px 0; padding: 0 10px 0 8px; gap: 4px; border-radius: 14px; }
+.n2-eall.pill span { font-size: 12px; line-height: 16px; font-weight: 700; color: #5170D7; }
+.n2-logged .lh .n2-eall { margin: -6px -4px -6px 0; }
+.n2-elink { padding: 0; font-size: 12px; line-height: 16px; font-weight: 700; color: #5170D7; background: none; cursor: pointer; }
+.n2-health.hlL, .n2-health.hlE { gap: 20px; }
+.n2-health.hlE .n2-hh { margin-bottom: -10px; }
+.n2-health.hlE .n2-logged.n2-lE, .n2-health.hlL .n2-lD { margin-top: 0; }
+.n2-hhL .ht { display: flex; align-items: center; gap: 8px; } .n2-hhL .ht b { font-size: 14px; line-height: 20px; font-weight: 700; color: #434343; } .n2-hhL .dot { width: 3px; height: 3px; border-radius: 50%; background: #434343; } .n2-hhL small { font-size: 12px; line-height: 16px; font-weight: 500; color: #696969; }
+.n2-lD { background: #fff; border-radius: 12px; padding: 8px 12px; margin: 0; }
+.n2-lD .n2-lrow { height: 36px; gap: 6px; border-bottom: 0; margin-bottom: 12px; position: relative; } .n2-lD .n2-lrow:last-child { height: 32px; margin-bottom: 0; }
+.n2-lD .n2-lrow:not(:last-child)::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: #ECECEC; } .n2-lD .n2-lrow img { width: 20px; height: 20px; margin: 0 2px; }
+.n2-lE { margin: 0; gap: 12px; } .n2-lE .lt { font-size: 12px; line-height: 16px; font-weight: 500; color: #696969; }
+.n2-lE .lch { display: flex; flex-wrap: wrap; gap: 12px; } .n2-lE .chip { padding: 6px 12px; border-radius: 12px; background: #fff; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; } .n2-lE .chip b { font-weight: 700; color: #5170D7; }
+.n2-lF { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,.8); text-align: left; cursor: pointer; }
+.n2-lF .tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; } .n2-lF b { font-size: 13px; line-height: 18px; font-weight: 700; color: #434343; } .n2-lF small { font-size: 12px; line-height: 16px; color: #696969; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hl-wrow { position: relative; }
+.hl-wtin { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; pointer-events: none; }
+.hl-wt.focus span::before { content: ''; display: inline-block; width: 2px; height: 24px; background: #3B82F6; vertical-align: -4px; margin-right: 1px; animation: hlBlink 1s steps(1) infinite; }
+.hl-ta { height: 98px; resize: none; }
+.hl-inw.ta { background: #F5F5F5; border-radius: 12px; }
+.hl-cntw { text-align: right; margin-top: -12px; padding-top: 8px; font-size: 11px; line-height: 14px; }   /* 8px below the box (cancels the card's 12px gap) */
+.hl-cnt, .hl-cntw .hl-cnt { position: static; right: auto; bottom: auto; font-size: 11px; line-height: 14px; color: #A1A1A1; pointer-events: none; }   /* 0/200 sits below the box, like the Figma */
+.vbR2 .vb-b { padding-top: 24px; }   /* more room under the date */
+.vbR2 .pane { background: linear-gradient(75deg, #FBF9F5 29.7%, #EFF0FE 100%); }   /* Figma sheet gradient */
+.vbR2 .vb-f { background: transparent; }
+.vb-r img { width: 20px; height: 20px; margin: 0 2px; flex: none; }   /* 20x20 like the Figma (24px slot keeps the text aligned) */
+.vb-t2 { padding: 10px 16px; display: flex; flex-direction: column; gap: 10px; }
+.vb-s { padding: 6px 0 11px; border-bottom: 1px solid #ECECEC; } .vb-s:last-child { border-bottom: 0; padding-bottom: 6px; }
+.vb-s .l { display: flex; align-items: center; justify-content: space-between; height: 22px; }
+.vb-s .l b { font-size: 16px; line-height: 22px; font-weight: 700; color: #434343; }
+.vb-s p { margin: 6px 0 0; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; }
+.vb-dt2:empty { display: none; } .vb-dt2 { display: flex; align-items: center; gap: 4px; margin-top: 4px; } .vb-dt2 img { width: 20px; height: 20px; } .vb-dt2 b { font-size: 18px; line-height: 26px; font-weight: 700; color: #5170D7; }
+.vb-pet { display: flex; gap: 16px; align-items: center; margin: 0 18px 20px; padding: 12px 16px; border-radius: 16px; border: 1.5px solid transparent; background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #DAB4FA, #A1D0FB) border-box; }
+.vb-pet .ph { position: relative; flex: 0 1 106px; aspect-ratio: 1; min-width: 80px; border-radius: 16px; overflow: hidden; background: #eee; }
+.vb-pet .ph img { position: absolute; width: 217.69%; height: 290.26%; left: -52.39%; top: -87.2%; max-width: none; }
+.vb-pet .inf { display: flex; flex-direction: column; gap: 8px; flex: 1 1 0; } .vb-pet .nm { display: block; font-size: 18px; line-height: 26px; font-weight: 700; color: #5170D7; margin-bottom: -2px; }
+.vb-pet .mt { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: #7C7C7C; white-space: nowrap; } .vb-pet .mt i { width: 3px; height: 3px; border-radius: 50%; background: #434343; }
+.vb-pet .g2 { display: flex; flex-direction: column; gap: 4px; } .vb-pet p { margin: 0; font-size: 12px; line-height: 16px; color: #565656; } .vb-pet p b { font-weight: 700; }
+.vb-t2.r2 { border-radius: 16px; } .vb-t2.r2 .vb-s .l b { font-size: 14px; line-height: 20px; color: #5170D7; } .vb-t2.r2 .vb-s p b { font-weight: 700; color: #434343; }
+.vb-tl { padding: 14px 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 13px; }
+.vb-tl .tg { display: flex; gap: 8px; } .vb-tl .dt { width: 33px; flex: none; font-size: 12px; line-height: 24px; color: #7C7C7C; }
+.vb-tl .ln { position: relative; width: 8px; flex: none; } .vb-tl .ln i { position: absolute; top: 8px; left: 0; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; background: #D9D9D9; border: 1px solid #C6C6C6; }
+.vb-tl .ln::after { content: ''; position: absolute; left: 3.5px; top: 18px; bottom: -17px; width: 1px; background: #C6C6C6; } .vb-tl .tg:last-child .ln::after { bottom: 0; }
+.vb-tl .en { flex: 1; min-width: 0; padding-left: 4px; } .vb-tl .er { display: flex; align-items: center; gap: 8px; height: 24px; margin-bottom: 12px; } .vb-tl .er:last-child { margin-bottom: 0; }
+.vb-tl .er img { width: 20px; height: 20px; flex: none; } .vb-tl .er span { font-size: 14px; line-height: 20px; font-weight: 500; color: #434343; }
+.vb-same { font-size: 10px; line-height: 10px; font-weight: 700; color: #7C7C7C; padding: 3px 6px; border-radius: 8px; background: #F0F0F0; }
+.hl-add { align-self: flex-start; height: 40px; padding: 0 14px 0 10px; border-radius: 12px; border: 1px solid rgba(67,67,67,.3); display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #434343; background: transparent; }
+#design-panel .dp-lab { margin: 10px 2px 0; font-size: 11px; line-height: 14px; font-weight: 700; letter-spacing: .02em; color: #8a8a8a; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -2749,7 +2805,7 @@ function setupPlayer() {
 }
 
 // ═══ Nanny Report — 1116 V1 (Design A / Design B, from Figma "Claude V2") ═══
-let rpDay = '21';
+let rpDay = '21', RP_DESIGN = 'N';
 const A = 'assets/n/', N2 = 'assets/n2/';
 const pad2 = n => String(n).padStart(2, '0');
 const RP_TODAY = 25, RP_READY = 24;      // opens on Sat 11/21 (Saturday state; swipe right / tap for 11/24); today (Wed 11/25) is still "in the works"
@@ -2883,18 +2939,50 @@ function n2Bark(d) {
     '<div class="rp-soothe2"><img src="' + A + 'B2_soothe.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>';
 }
 
+// ═══ "Current Design" (the live Nanny Report from prototype v72: Video Highlights + Activity / Barking / Meowing cards) ═══
+const RPO_CFG = [
+  { sec: 'Activity', lc: '#1E7BAC', bar: '#BBD7E6', icon: [['imgEllipse165.svg', 0, 0, 35.885, 36], ['imgFrame.svg', 2.05, 2.42, 30.76, 30.86]], ti: 'imgGroup3728', line: 'imgLine101',
+    text: 'Archie was active 336 times today, 10% above the average.', tp: 20, avg: 305, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [8.64, 27.36]] },
+  { sec: 'Barking', lc: '#F16849', bar: '#FBD1C8', icon: [['imgGroup99.svg', 0, 0, 36, 36]], ti: 'imgGroup3729', line: 'imgLine102', soothe: true,
+    text: 'Archie was barking 15 times today, less than usual.', tp: 20, avg: 20, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [5.68, 30.32]] },
+  { sec: 'Meowing', lc: '#F16849', bar: '#FBD1C8', icon: [['imgEllipse166.svg', 0, 0, 35.973, 36], ['imgGroup2369.svg', 1, 0.97, 35, 34.9]], ti: 'imgGroup3729', line: 'imgLine102',
+    text: 'Archie was meowing 15 times today, less than usual.', tp: 20, avg: 20, bars: [[5, 31], [7, 29], [5, 31], [5, 31], [3, 33], [0, 36], [0.53, 35.47]] },
+];
+// Daily Diary as drawn in the Figma "Nanny Report_full page_original": video + full text with the timeline list
+function n2DiaryO() {
+  return '<div class="n2-top-grp"><div class="rp-sec">Daily Diary</div><div class="n2-card"><div class="rp-diary-media" data-play="diary"><img id="rp-diary-img" src="' + N2 + 'diary_poster.jpg" alt=""><img class="rp-dplay" src="assets/n/diary_play.svg" alt=""><video id="rp-diary-video" playsinline webkit-playsinline preload="auto"></video><img class="rp-dkebab" src="assets/n/diary_kebab.svg" alt=""></div>' +
+    '<div class="n2-dfull"><p>Today, Archie had a fun-filled day! He played, sat in the cage, and enjoyed looking out the window.</p><ul><li>Looking at the window @ 11:23AM</li><li>Running in the living room@ 12:05PM</li><li>Sleeping on his bed @ 1:23PM</li><li>Looking at the door @ 2:05PM</li><li>Chewing a toy@ 3:05PM</li></ul></div></div></div>';
+}
+function n2PageO(d) {
+  const hl = (t, tm) => '<div class="rp-hl"><div class="rp-hl-media"><img src="assets/d/rp_hl1.jpg" alt=""><img class="rp-play" src="assets/d/rp_play.svg" alt=""></div><div class="rp-hl-body"><div><div class="rp-hl-title">' + t + '</div><div class="rp-hl-meta">' + tm + '<i></i>Activity</div></div><div class="rp-hl-kebab"><img src="assets/d/rp_kebab.svg" alt=""></div></div></div>';
+  const lt = n2Letters(d);
+  let out = n2DiaryO() + '<div><div class="rp-sec">Video Highlights</div><div class="rp-hl-row">' + hl('Looking out window', '11:23 AM') + hl('Running in the living room', '12:05 AM') + '</div></div>';
+  RPO_CFG.forEach(o => {
+    const bars = o.bars.map(([mt, h], i) => '<i style="left:' + RP_X[i] + 'px;top:' + mt + 'px;height:' + h + 'px;background:' + o.bar + ';--bi:' + i + '"></i>').join('');
+    const lets = lt.map((l, i) => '<em class="' + (i === 6 ? 'today' : '') + '" style="left:' + RP_X[i] + 'px;top:40px;--bi:' + i + '">' + l + '</em>').join('');
+    out += '<div><div class="rp-sec">' + o.sec + '</div><div class="rp-card rp-n' + (o.soothe ? ' has-soothe' : '') + '"><div class="rp-n-main"><div class="rp-n-top"><div class="rp-n-head">' +
+      '<div class="rp-ic">' + o.icon.map(([f, l, t, w, h]) => '<img src="' + A + f + '" alt="" style="left:' + l + 'px;top:' + t + 'px;width:' + w + 'px;height:' + h + 'px">').join('') + '</div><p>' + o.text + '</p></div>' +
+      '<div class="rp-ch"><div class="rpO-top"><b style="color:' + o.lc + '">Last 7 days</b><span class="rpO-tr"><img src="' + A + o.ti + '.svg" alt="">' + o.tp + '% from last week</span></div>' +
+      '<div class="rp-ch-row"><div class="rp-avg2" style="color:' + o.lc + '"><div class="n" style="gap:4px"><b>' + o.avg + '</b><small style="margin-top:8.5px">times</small></div><span>Average</span></div>' +
+      '<div class="rp-bars2" style="height:56px">' + bars + lets + '<img class="avgline" src="' + A + o.line + '.svg" alt="" style="top:13.26px"></div></div></div></div>' +
+      (o.soothe ? '<div class="rp-soothe2"><img src="' + A + 'imgGroup4313.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>' : '') + '</div></div></div>';
+  });
+  return '<div class="n2 n2O">' + out + '</div>';
+}
 function n2Page(d) {
+  if (RP_DESIGN === 'O') return n2PageO(d);
   const sec = (t, inner, beta) => n2Sec(t + (beta ? BETA : ''), inner);   // Activity + Barking are only BETA with Premium (similar-dogs comparison); Eating & Drinking always
   const top = '<div class="n2-top-grp">' + n2Diary(d) + (PREMIUM ? n2Week(d) : '') + '</div>';
   return '<div class="n2">' + top +
     sec('Activity', '<div class="n2-card n2-stk n2-stk16">' + n2Act(d) + '</div>', PREMIUM) + sec('Eating &amp; Drinking', n2ED(d), true) +
     sec('Barking', '<div class="n2-card n2-stk n2-stk16 n2-bm">' + n2Bark(d) + '</div>', PREMIUM) +
-    (PREMIUM ? '<div class="n2-fix" inert>' + n2Health() + n2Vet() + '</div>' : '') + '</div>';
+    (PREMIUM ? '<div class="n2-fix">' + n2Health() + n2Vet() + '</div>' : '') + '</div>';
 }
 
 // ═══ Health Log + Vet Brief (Figma "Claude Vet Brief") ═══
 const HL = [['Weight', 'h_weight', 'weight'], ['Food', 'h_food', 'food'], ['Vaccine', 'h_vaccine', 'vaccine'], ['Meds', 'h_meds', 'meds'], ['Note', 'h_note', 'note']];
-const HLOG = {};                       // logged items per day
+const HLOG = {};
+
 const HLS = { weight: '', unit: 'lb', foodChip: '', food: '', vac: [], vacOther: '', vacOpen: false, vacList: [], med: '', dose: '', medChip: '', note: '', order: [], medList: [], foodList: [] };
 let HL_ID = 1, HL_EDIT = null, HL_UNDO = null;
 const HL_KEYS = ['weight', 'food', 'vaccine', 'meds', 'note'];
@@ -2905,14 +2993,35 @@ let VET_RNG = { s: null, e: null };           // applied custom range (Nov 2026 
 const rngLabel = r => 'Nov ' + r.s + ' – Nov ' + r.e;
 const MON = 'Nov.';
 const dnum = (d, off) => { const dt = new Date(2026, 10, +d - off); return ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][dt.getMonth()] + ' ' + pad2(dt.getDate()) + ', ' + dt.getFullYear(); };
+let HL_OPT = 'D';   // DRAFT: where the single "edit health log" control sits (A = title row icon, B = "Logged today" row icon, C = Edit pill)
 function n2Health() {
   const log = HLOG[rpDay] || [];
-  const logged = log.length ? '<div class="n2-logged"><span class="lt">Logged today</span>' + log.map(it => '<div class="n2-lrow"><img src="' + N2 + 'i_' + it.k + '.svg" alt=""><span>' + it.t + '</span>' + '<button class="n2-edit" data-hledit="' + it.id + '" aria-label="Edit"><img src="' + N2 + 'edit.svg" alt=""></button></div>').join('') + '</div>' : '';
-  return '<div class="n2-card n2-health"><b>Health Log</b><div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.png" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
+  const penBtn = '<button class="n2-eall" data-hleditall aria-label="Edit health log"><img src="' + N2 + 'edit.svg" alt=""></button>';
+  const editPill = '<button class="n2-eall pill" data-hleditall aria-label="Edit health log"><img src="' + N2 + 'edit.svg" alt=""><span>Edit</span></button>';
+  const logged = log.length ? '<div class="n2-logged"><div class="lh"><span class="lt">Logged today</span>' + (HL_OPT === 'B' ? penBtn : '') + '</div>' + log.map(it => '<div class="n2-lrow"><img src="' + N2 + 'i_' + it.k + '.png" alt=""><span>' + it.t + '</span></div>').join('') + '</div>' : '';
+  if (HL_OPT >= 'D' && log.length) {     // Figma "Log entered - List" / "Log entered - Tag"
+    const kv = t => { const i = t.indexOf(':'); return i < 0 ? ['', t] : [t.slice(0, i), t.slice(i + 1).trim()]; };
+    const LBL = { weight: 'Weight', food: 'Food', vaccine: 'Vaccine', meds: 'Meds', note: 'Note' };
+    const tagVal = it => { const d = it.d || {};
+      if (it.k === 'food') return it.th || hlEsc(kv(it.t)[1]);
+      if (it.k === 'vaccine') return hlEsc((d.vac && d.vac[0]) || d.vacOther || it.t.replace(/ vaccine$/, ''));
+      if (it.k === 'meds') return hlEsc(d.med || kv(it.t)[1]);
+      if (it.k === 'note') return hlEsc(d.note || kv(it.t)[1]);
+      return hlEsc(it.t); };
+    const iconsRow = '<div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.png" alt=""><span>' + n + '</span></button>').join('') + '</div>';
+    if (HL_OPT === 'E') {
+      const pills = log.map(it => '<span class="chip"><b>' + LBL[it.k] + '</b> ' + tagVal(it) + '</span>').join('');
+      return '<div class="n2-card n2-health hlE"><div class="n2-hh"><b>Health Log</b></div>' + iconsRow + '<div class="n2-logged n2-lE"><span class="lt">Logged today</span><div class="lch">' + pills + '</div></div></div>';
+    }
+    const rows = log.map(it => '<div class="n2-lrow"><img src="' + N2 + 'i_' + it.k + '.png" alt=""><span>' + (it.th || hlEsc(kv(it.t)[1])) + '</span></div>').join('');
+    return '<div class="n2-card n2-health hlL"><div class="n2-hh n2-hhL"><span class="ht"><b>Health Log</b><i class="dot"></i><small>' + log.length + ' Logged today</small></span><button class="n2-elink" data-hleditall>Edit</button></div><div class="n2-lD">' + rows + '</div></div>';
+  }
+  const head = '<div class="n2-hh"><b>Health Log</b>' + (log.length && HL_OPT === 'A' ? penBtn : log.length && HL_OPT === 'C' ? editPill : '') + '</div>';
+  return '<div class="n2-card n2-health">' + head + '<div class="n2-hrow">' + HL.map(([n, f, k]) => '<button class="n2-hi" data-hlopen="' + k + '"><img src="' + N2 + f + '.png' + '" alt=""><span>' + n + '</span></button>').join('') + '</div>' + logged + '</div>';
 }
 const VET_OPTS = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Custom dates'];
 function n2Vet() {
-  return '<div class="rp-vet n2-vet"><div class="t"><b>Vet Brief</b><span>Share Archie’s trend and logs to your vet.</span></div><div class="r"><button class="rp-sel" data-vetsel><img src="' + N2 + 'cal_blue.svg" alt="" width="24" height="24"><span>' + (VET_OPT === 'Custom dates' ? (VET_RNG.s ? rngLabel(VET_RNG) : 'Select dates') : VET_OPT) + '</span><img src="' + A + 'imgExpand.svg" alt="" width="16" height="16"></button><button class="rp-gen" data-vetgen>Generate</button></div>' +
+  return '<div class="rp-vet n2-vet"><div class="t"><b>Vet Brief</b><span>Share Archie’s trend and logs to your vet.</span></div><div class="r"><button class="rp-sel" data-vetsel><img src="' + N2 + 'cal_blue.svg' + '" alt="" width="24" height="24"><span>' + (VET_OPT === 'Custom dates' ? (VET_RNG.s ? rngLabel(VET_RNG) : 'Select dates') : VET_OPT) + '</span><img src="' + A + 'imgExpand.svg" alt="" width="16" height="16"></button><button class="rp-gen" data-vetgen>Generate</button></div>' +
     (VET_OPT === 'Custom dates' ? cdMarkup() : '') + '<div class="n2-dd">' + VET_OPTS.map(o => '<button class="' + (o === VET_OPT ? 'sel' : '') + '" data-vetopt="' + o + '">' + o + '</button>').join('') + '</div></div>';
 }
 // ── Health Log sheet ──
@@ -2923,20 +3032,22 @@ function hlChips(group, list, cur, cls) {
 
 function hlIn(f, ph, ta) {
   const v = HLS[f] || '', esc = v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-  return '<div class="hl-inw' + (v ? ' has' : '') + (ta ? ' ta' : '') + '">' + (ta ? '<textarea class="hl-in hl-ta" inputmode="none" maxlength="200" data-f="' + f + '" placeholder="' + ph + '">' + esc + '</textarea><span class="hl-cnt">' + v.length + '/200</span>' : '<input class="hl-in" inputmode="none" enterkeyhint="done" data-f="' + f + '" placeholder="' + ph + '" value="' + esc + '">') +
-    '<button class="hl-clr" data-clr="' + f + '" aria-label="Clear"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#A1A1A1"/><path d="M6 6l6 6M12 6l-6 6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>';
+  return '<div class="hl-inw' + (v ? ' has' : '') + (ta ? ' ta' : '') + '">' + (ta ? '<textarea class="hl-in hl-ta" inputmode="none" maxlength="200" data-f="' + f + '" placeholder="' + ph + '">' + esc + '</textarea>' : '<input class="hl-in" inputmode="none" enterkeyhint="done" data-f="' + f + '" placeholder="' + ph + '" value="' + esc + '">') +
+    '<button class="hl-clr" data-clr="' + f + '" aria-label="Clear"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#A1A1A1"/><path d="M6 6l6 6M12 6l-6 6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>' + (ta ? '<div class="hl-cntw"><span class="hl-cnt">' + v.length + '/200</span></div>' : '');
 }
 
 function renderHL() {
   const ed = HL_EDIT ? (HLOG[rpDay] || []).find(x => x.id === HL_EDIT) : null;
-  const ic = (k, n) => '<div class="hl-ch"><img src="' + N2 + 'i_' + k + '.svg" alt="" style="width:' + (k === 'note' ? 20 : 24) + 'px;height:' + (k === 'note' ? 20 : 24) + 'px"><b>' + n + '</b>' + (ed && ed.k === k && ['food', 'meds', 'note'].includes(k) ? '<button class="hl-delete" data-hldelete>Delete</button>' : '') + '</div>';
+  const ic = (k, n) => '<div class="hl-ch"><img src="' + N2 + 'i_' + k + '.png" alt="" style="width:' + (k === 'note' ? 20 : 24) + 'px;height:' + (k === 'note' ? 20 : 24) + 'px"><b>' + n + '</b>' + (ed && ed.k === k && ['food', 'meds', 'note'].includes(k) ? '<button class="hl-delete" data-hldelete>Delete</button>' : '') + '</div>';
+  const lv = it => it.th ? it.th : hlEsc(it.t.indexOf(':') < 0 ? it.t : it.t.slice(it.t.indexOf(':') + 1).trim());
+  const lg = k => { const r = !HL_EDIT ? (HLOG[rpDay] || []).filter(it => it.k === k) : []; return r.length ? '<div class="hl-mlist hl-lg">' + r.map(it => '<div class="hl-mrow"><span>' + lv(it) + '</span><button class="hl-mdel" data-hlrm="' + it.id + '" aria-label="Delete entry"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : ''; };   // already-logged entries sit inside their own card
   document.getElementById('hl-body').innerHTML =
-    '<div class="hl-card" data-sec="weight">' + ic('weight', 'Weight') + '<div class="hl-wrow"><button class="hl-wt' + (HLS.weight ? ' has' : '') + '" data-wt><span>' + (HLS.weight || '0.00') + '</span></button>' +
+    '<div class="hl-card" data-sec="weight">' + ic('weight', 'Weight') + lg('weight') + '<div class="hl-wrow"><input class="hl-wtin" inputmode="none" autocomplete="off" aria-label="Weight" value="' + HLS.weight + '"><button class="hl-wt' + (HLS.weight ? ' has' : '') + '" data-wt><span>' + (HLS.weight || '0.00') + '</span></button>' +
     '<div class="hl-unit"><i class="' + (HLS.unit === 'kg' ? 'k' : '') + '"></i><button data-unit="lb" class="' + (HLS.unit === 'lb' ? 'on' : '') + '">lb</button><button data-unit="kg" class="' + (HLS.unit === 'kg' ? 'on' : '') + '">kg</button></div></div><p class="hl-last">Last logged 4.1 kg</p></div>' +
-    '<div class="hl-card" data-sec="food">' + ic('food', 'Food') + (HLS.foodList.length ? '<div class="hl-mlist">' + HLS.foodList.map((m, i) => '<div class="hl-mrow"><span>Food: ' + [m.foodChip, m.food].filter(Boolean).join(', ').replace(/</g, '&lt;') + '</span><button class="hl-mdel" data-fooddel="' + i + '" aria-label="Delete food"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('food', 'Did Archie eat any new foods recently?') + '<div class="hl-chips">' + hlChips('foodChip', ['Breakfast', 'Lunch', 'Dinner'], HLS.foodChip, 's') + '</div>' + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.food ? '' : ' off') + '" data-foodadd data-addf="food"><img src="' + N2 + 'plus.svg" alt="">Add food</button>') + '</div>' +
-    '<div class="hl-card" data-sec="vaccine">' + ic('vaccine', 'Vaccine') + '<div class="hl-chips">' + hlChips('vac', ['Rabies', 'Lyme', 'Canine Flu', 'Lyme '], HLS.vac) + '<button class="hl-chip' + (HLS.vacOpen ? ' on' : '') + '" data-vacother><img src="' + N2 + 'plus.svg" alt="">Others</button></div>' + (HLS.vacOpen ? (HLS.vacList.length ? '<div class="hl-mlist">' + HLS.vacList.map((v, i) => '<div class="hl-mrow"><span>Vaccine: ' + v.replace(/</g, '&lt;') + '</span><button class="hl-mdel" data-vacdel="' + i + '" aria-label="Delete vaccine"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('vacOther', 'Type vaccine name') + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.vacOther.trim() ? '' : ' off') + '" data-vacadd data-addf="vacOther"><img src="' + N2 + 'plus.svg" alt="">Add vaccine</button>') : '') + '</div>' +
-    '<div class="hl-card" data-sec="meds">' + ic('meds', 'Medication/Supplements') + (HLS.medList.length ? '<div class="hl-mlist">' + HLS.medList.map((m, i) => '<div class="hl-mrow"><span>Meds: ' + [m.med, m.dose, m.medChip].filter(Boolean).join(', ').replace(/</g, '&lt;') + '</span><button class="hl-mdel" data-medel="' + i + '" aria-label="Delete medicine"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('med', 'Medicine name') + '<div class="hl-chips">' + hlChips('medChip', ['Morning', 'Afternoon', 'Night'], HLS.medChip, 's') + '</div>' + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.med ? '' : ' off') + '" data-medadd data-addf="med"><img src="' + N2 + 'plus.svg" alt="">Add medicine</button>') + '</div>' +
-    '<div class="hl-card" data-sec="note">' + ic('note', 'Note') + hlIn('note', 'Anything you noticed about Archie today?', true) + '</div>';
+    '<div class="hl-card" data-sec="food">' + ic('food', 'Food') + lg('food') + (HLS.foodList.length ? '<div class="hl-mlist">' + HLS.foodList.map((m, i) => '<div class="hl-mrow"><span>' + foodHtml(m) + '</span><button class="hl-mdel" data-fooddel="' + i + '" aria-label="Delete food"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('food', 'Did Archie eat any new foods recently?') + '<div class="hl-chips">' + hlChips('foodChip', ['Breakfast', 'Lunch', 'Dinner'], HLS.foodChip, 's') + '</div>' + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.food ? '' : ' off') + '" data-foodadd data-addf="food"><img src="' + N2 + 'plus.svg" alt="">Add food</button>') + '</div>' +
+    '<div class="hl-card" data-sec="vaccine">' + ic('vaccine', 'Vaccine') + lg('vaccine') + '<div class="hl-chips">' + hlChips('vac', VAC_OPTS, HLS.vac) + '<button class="hl-chip' + (HLS.vacOpen ? ' on' : '') + '" data-vacother><img src="' + N2 + 'plus.svg" alt="">Others</button></div>' + (HLS.vacOpen ? (HLS.vacList.length ? '<div class="hl-mlist">' + HLS.vacList.map((v, i) => '<div class="hl-mrow"><span>Vaccine: ' + v.replace(/</g, '&lt;') + '</span><button class="hl-mdel" data-vacdel="' + i + '" aria-label="Delete vaccine"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('vacOther', 'Type vaccine name') + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.vacOther.trim() ? '' : ' off') + '" data-vacadd data-addf="vacOther"><img src="' + N2 + 'plus.svg" alt="">Add vaccine</button>') : '') + '</div>' +
+    '<div class="hl-card" data-sec="meds">' + ic('meds', 'Medication/Supplements') + lg('meds') + (HLS.medList.length ? '<div class="hl-mlist">' + HLS.medList.map((m, i) => '<div class="hl-mrow"><span>Meds: ' + [m.med, m.dose, m.medChip].filter(Boolean).join(', ').replace(/</g, '&lt;') + '</span><button class="hl-mdel" data-medel="' + i + '" aria-label="Delete medicine"><img src="' + N2 + 'trash.svg" alt=""></button></div>').join('') + '</div>' : '') + hlIn('med', 'Medicine name') + '<div class="hl-chips">' + hlChips('medChip', ['Morning', 'Afternoon', 'Night'], HLS.medChip, 's') + '</div>' + (HL_EDIT ? '' : '<button class="hl-add' + (HLS.med ? '' : ' off') + '" data-medadd data-addf="med"><img src="' + N2 + 'plus.svg" alt="">Add medicine</button>') + '</div>' +
+    '<div class="hl-card" data-sec="note">' + ic('note', 'Note') + lg('note') + hlIn('note', 'Anything you noticed about Archie today?', true) + '</div>';
   hlUpdateSave();
 }
 function hlUpdateSave() {
@@ -3030,21 +3141,24 @@ function hkKey(t) {
 function openHL(sec) {
   if (sec && HL_EDIT) hlResetDraft();
   renderHL();
-  document.getElementById('hl-date').textContent = 'Nov ' + pad2(rpDay) + ', 2026';
+  document.getElementById('hl-date').textContent = 'Nov ' + pad2(+rpDay) + ', 2026';
   const sh = document.getElementById('hl-sheet'), body = document.getElementById('hl-body');
   sh.classList.add('show'); sh.classList.remove('kbd2', 'qw');
   body.style.paddingBottom = '';
   body.scrollTop = 0;
   // open the keyboard for the chosen section (inside the tap, so phones allow it)
-  if (sec === 'weight') { sh.classList.add('kbd2'); body.querySelector('.hl-wt').classList.add('focus'); }
+  if (sec === 'weight') { sh.classList.add('kbd2'); body.querySelector('.hl-wt').classList.add('focus'); hlFocusWt(); }
   else { const f = body.querySelector({ food: '[data-f="food"]', meds: '[data-f="med"]', note: '[data-f="note"]' }[sec] || '#none'); if (f) { f.focus({ preventScroll: true }); hkShow(f); } }
   requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
   if (sec) { const t = body.querySelector('[data-sec="' + sec + '"]'); if (t) setTimeout(() => body.scrollTo({ top: Math.max(0, t.offsetTop - 4), behavior: 'smooth' }), 120); }
 }
 function closeHL(saved) { const sh = document.getElementById('hl-sheet'); if (!sh || !sh.classList.contains('show')) return; if (!saved && HL_EDIT) hlResetDraft(); sh.classList.remove('on', 'kbd2', 'qw'); HK.active = null; setTimeout(() => sh.classList.remove('show'), 330); }
+const hlEsc = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const foodHtml = f => hlEsc(f.foodChip && f.food ? f.foodChip + ': ' + f.food : f.foodChip || f.food || '');   // "Breakfast: meat"
+let VAC_OPTS = ['Rabies', 'Lyme', 'Canine Flu', 'Lyme '];   // vaccine buttons; typed vaccines are added here, before "Others"
 function hlEntries(k) {
   if (k === 'weight') return [{ k, t: HLS.weight + ' ' + HLS.unit, d: { weight: HLS.weight, unit: HLS.unit } }];
-  if (k === 'food') return HLS.foodList.concat(HLS.foodChip || HLS.food ? [{ foodChip: HLS.foodChip, food: HLS.food }] : []).map(f => ({ k, t: 'Food: ' + [f.foodChip, f.food].filter(Boolean).join(', '), d: f }));
+  if (k === 'food') return HLS.foodList.concat(HLS.foodChip || HLS.food ? [{ foodChip: HLS.foodChip, food: HLS.food }] : []).map(f => ({ k, t: 'Food: ' + (f.foodChip && f.food ? f.foodChip + ': ' + f.food : f.foodChip || f.food || ''), th: foodHtml(f), d: f }));
   if (k === 'vaccine') return HLS.vac.map(v => ({ k, t: v.trim() + ' vaccine', d: { vac: [v] } })).concat(HLS.vacList.concat(HLS.vacOther.trim() ? [HLS.vacOther.trim()] : []).map(v => ({ k, t: v + ' vaccine', d: { vac: [], vacOther: v } })));
   if (k === 'meds') return HLS.medList.concat(HLS.med || HLS.dose || HLS.medChip ? [{ med: HLS.med, dose: HLS.dose, medChip: HLS.medChip }] : []).map(m => ({ k, t: 'Meds: ' + [m.med, m.dose, m.medChip].filter(Boolean).join(', '), d: m }));
   return [{ k: 'note', t: 'Note: ' + HLS.note, d: { note: HLS.note } }];
@@ -3076,12 +3190,13 @@ function hlDelete(id) {
   const list = HLOG[rpDay] || [], i = list.findIndex(x => x.id === +id); if (i < 0) return;
   const e = list[i]; list.splice(i, 1); HL_UNDO = { day: rpDay, i, e };
   const card = document.querySelector('.n2-health'); if (card) card.outerHTML = n2Health();
-  hlToast({ food: 'Food log', meds: 'Medication log', note: 'Note' }[e.k] + ' deleted');
+  hlToast({ weight: 'Weight', food: 'Food log', vaccine: 'Vaccine', meds: 'Medication log', note: 'Note' }[e.k] + ' deleted');
 }
 function hlUndo() {
   if (!HL_UNDO) return; const { day, i, e } = HL_UNDO; (HLOG[day] || (HLOG[day] = [])).splice(i, 0, e); HL_UNDO = null;
-  const card = document.querySelector('.n2-health'); if (card && day === rpDay) card.outerHTML = n2Health();
+  const card = document.querySelector('.n2-health'); if (card) card.outerHTML = n2Health();
   const t = document.getElementById('n2-toast'); if (t) t.classList.remove('on');
+  const sh = document.getElementById('hl-sheet'); if (sh && sh.classList.contains('show') && !HL_EDIT) renderHL();
 }
 
 
@@ -3091,7 +3206,7 @@ function cdGrid() {
   const rows = [[1, 2, 3, 4, 5, 6, 7], [8, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30]];
   const both = DPS.s && DPS.e, lo = both ? Math.min(DPS.s, DPS.e) : DPS.s, hi = both ? Math.max(DPS.s, DPS.e) : DPS.s;
   return '<div class="dp-wd">' + 'SMTWTFS'.split('').map(c => '<span>' + c + '</span>').join('') + '</div>' +
-    rows.map(r => '<div class="dp-row">' + r.map(n => { const off = n > RP_TODAY, ep = lo && (n === lo || n === hi), mid = both && n > lo && n < hi;
+    rows.map(r => '<div class="dp-row">' + r.map(n => { const off = n > +rpDay, ep = lo && (n === lo || n === hi), mid = both && n > lo && n < hi;
       return '<button class="dp-d' + (off ? ' off' : '') + (ep ? ' ep' : '') + (mid ? ' mid' : '') + (both && lo !== hi && n === lo ? ' l' : '') + (both && lo !== hi && n === hi ? ' r' : '') + '"' + (off ? ' disabled' : ' data-cdd="' + n + '"') + '><i>' + pad2(n) + '</i></button>'; }).join('') + '</div>').join('');
 }
 function cdHint() { return DPS.s && DPS.e ? rngLabel({ s: Math.min(DPS.s, DPS.e), e: Math.max(DPS.s, DPS.e) }) : DPS.s ? 'Nov ' + DPS.s + ' – pick an end date' : 'Pick a start and an end date'; }
@@ -3104,40 +3219,89 @@ const DPS = { s: null, e: null };
 // ── 7-day Vet Brief sheet ──
 const VB_POOL = [[10, 5, 'meds', 'Meds: Probiotic'], [10, 9, 'weight', 'Weight: 4.0kg'], [10, 14, 'food', 'Food: Salmon treats'], [10, 19, 'vaccine', 'Vaccine : Lyme'], [10, 22, 'weight', 'Weight: 4.0kg'], [10, 27, 'meds', 'Meds: Flea & tick'],
   [11, 1, 'note', 'Note: Scratching ears a bit'], [11, 3, 'food', 'Food: New kibbles'], [11, 5, 'meds', 'Meds: Joint supplements'], [11, 7, 'weight', 'Weight: 4.1kg'], [11, 9, 'vaccine', 'Vaccine : rabies'], [11, 9, 'weight', 'Weight: 4.2kg'],
-  [11, 11, 'meds', 'Meds: Probiotic'], [11, 12, 'weight', 'Weight: 4.2kg'], [11, 13, 'note', 'Note: Slept more than usual'], [11, 15, 'food', 'Food: Chicken & rice'], [11, 16, 'vaccine', 'Vaccine : Lyme booster'], [11, 17, 'note', 'Note: Ate slowly at dinner']];
-const VB_TR = {   // behavior trends per period length: [name, arrow, pct, usual-text, note]
-  7: [['Activity', null, 0, 'More active in the afternoon'], ['Eating', 'up', 10, 'Eating more than usual'], ['Drinking', 'down', 5, 'Drinking slightly less'], ['Barking', null, 0, 'No changes'], ['Meowing', null, 0, 'No changes']],
-  14: [['Activity', 'down', 6, 'Less active on weekdays'], ['Eating', 'up', 4, 'Eating a little more'], ['Drinking', null, 0, 'Steady intake'], ['Barking', 'up', 12, 'Barking more in the mornings'], ['Meowing', null, 0, 'No changes']],
-  30: [['Activity', 'down', 9, 'Gradually less active'], ['Eating', 'down', 7, 'Eating less since the food change'], ['Drinking', 'up', 8, 'Drinking more, especially evenings'], ['Barking', 'up', 15, 'Barking more when home alone'], ['Meowing', 'down', 5, 'Teddy meows slightly less']],
+  [11, 11, 'meds', 'Meds: Probiotic'], [11, 12, 'weight', 'Weight: 4.2kg'], [11, 13, 'note', 'Note: Slept more than usual'], [11, 15, 'food', 'Food: Chicken & rice'], [11, 16, 'vaccine', 'Vaccine : Lyme booster'], [11, 17, 'note', 'Note: Ate slowly at dinner'],
+  // more than one entry on the same day
+  [10, 19, 'note', 'Note: Barked at the doorbell'], [10, 22, 'food', 'Food: Chicken & rice'], [10, 27, 'weight', 'Weight: 4.0kg'], [11, 3, 'note', 'Note: Chewed a toy'], [11, 5, 'food', 'Food: New kibbles'], [11, 5, 'note', 'Note: Ate slowly'], [11, 7, 'meds', 'Meds: Probiotic'],
+  [11, 11, 'food', 'Food: Salmon treats'], [11, 11, 'note', 'Note: Playful in the morning'], [11, 12, 'note', 'Note: Scratching less today'], [11, 12, 'meds', 'Meds: Probiotic'], [11, 13, 'food', 'Food: Lunch kibbles'],
+  [11, 15, 'meds', 'Meds: Joint supplements'], [11, 15, 'weight', 'Weight: 4.3kg'], [11, 16, 'note', 'Note: Slept more after the walk'], [11, 17, 'food', 'Food: Dinner chicken'], [11, 17, 'weight', 'Weight: 4.2kg']];
+const VB_TR = {   // behavior trends per period length, wording from the Figma "7 day-Health Report1": [name, arrow, pct, text]
+  7: [['Activity', 'up', 20, 'More active than usual, average 20 times/day. 10% more active than similar pets.'], ['Eating', 'down', 10, 'Eating less than usual, average 5 times/day'], ['Drinking', 'up', 10, 'Drinking more than usual, average 10 times/day.'], ['Barking', 'up', 10, 'Barking more than usual, average 40 times/day. Barks 30% more than similar pets.']],
+  14: [['Activity', 'down', 6, 'Less active than usual, average 18 times/day. 8% less active than similar pets.'], ['Eating', 'up', 4, 'Eating a little more than usual, average 6 times/day.'], ['Drinking', null, 0, 'Drinking about the same as usual, average 9 times/day.'], ['Barking', 'up', 12, 'Barking more than usual, average 42 times/day. Barks 25% more than similar pets.']],
+  30: [['Activity', 'down', 9, 'Less active than usual, average 17 times/day. 12% less active than similar pets.'], ['Eating', 'down', 7, 'Eating less than usual, average 5 times/day. 15% less than similar pets.'], ['Drinking', 'up', 8, 'Drinking more than usual, average 11 times/day.'], ['Barking', 'up', 15, 'Barking more than usual, average 44 times/day. Barks 35% more than similar pets.']],
 };
 const vbMD = (m, d) => pad2(m) + '/' + pad2(d);
 function vbRange() {   // inclusive [start, end] as Date objects + length
   const cust = VET_OPT === 'Custom dates' && !!VET_RNG.s;
-  const n = cust ? VET_RNG.e - VET_RNG.s : VET_OPT === 'Last 14 days' ? 14 : VET_OPT === 'Last 30 days' ? 30 : 7;
-  const e = new Date(2026, 10, cust ? VET_RNG.e : +rpDay), s = new Date(2026, 10, cust ? VET_RNG.s : +rpDay - n);
+  const n = cust ? VET_RNG.e - VET_RNG.s + 1 : VET_OPT === 'Last 14 days' ? 14 : VET_OPT === 'Last 30 days' ? 30 : 7;   // inclusive number of days
+  const e = new Date(2026, 10, cust ? VET_RNG.e : +rpDay), s = new Date(2026, 10, cust ? VET_RNG.s : +rpDay - (n - 1));   // presets end on the day you are viewing (Last 7 days of 11/21 = 11/15 – 11/21)
   return { s, e, n };
+}
+function vbTrends7(d) {   // same numbers as the report for that day (labels, weekly summary): "% from last week" = vs. the 7 days before
+  const D = dayData(d), a = D.act, e = D.eat, w = D.drink, b = D.bark, ar = o => o.up ? 'up' : 'down', rel = (x, y) => Math.round(Math.abs(x - y) / y * 100);
+  const sim = (o, w1, w2) => { const p = rel(o.n, o.sim); return p ? ' ' + p + '% ' + (o.n < o.sim ? w1 : w2) + ' than similar pets.' : ''; };
+  return [
+    ['Activity', ar(a), a.pct, (a.up ? 'More' : 'Less') + ' active than usual, average ' + a.avg + ' times/day.' + sim(a, 'less active', 'more active')],
+    ['Eating', ar(e), e.pct, 'Eating ' + (e.up ? 'more' : 'less') + ' than usual, average ' + e.avg + ' times/day'],
+    ['Drinking', ar(w), w.pct, 'Drinking ' + (w.up ? 'more' : 'less') + ' than usual, average ' + w.avg + ' times/day.'],
+    ['Barking', ar(b), b.pct, 'Barking ' + (b.up ? 'more' : 'less') + ' than usual, average ' + b.avg + ' times/day.' + (rel(b.n, b.sim) ? ' Barks ' + rel(b.n, b.sim) + '% ' + (b.n < b.sim ? 'less' : 'more') + ' than similar pets.' : '')],
+  ];
 }
 function vbData() {
   const { s, e, n } = vbRange(), md = d => vbMD(d.getMonth() + 1, d.getDate()), day = 864e5;
   const notes = VB_POOL.map(([m, d, k, t]) => ({ dt: new Date(2026, m - 1, d), k, t })).concat(
     Object.keys(HLOG).flatMap(dk => (HLOG[dk] || []).map(it => ({ dt: new Date(2026, 10, +dk), k: it.k, t: it.t })))).filter(x => x.dt >= s && x.dt <= e).sort((a, b) => a.dt - b.dt);
-  const pe = new Date(s - day), ps = new Date(+pe - n * day), cmp = md(ps) + '-' + md(pe);
+  const pe = new Date(s - day), ps = new Date(+pe - (n - 1) * day), cmp = md(ps) + '-' + md(pe);
   const fam = n <= 10 ? 7 : n <= 21 ? 14 : 30;
-  const trends = VB_TR[fam].map(([t, ar, pct, d]) => [t, ar, ar ? pct + '% vs. ' + cmp : 'Usual', d]);
-  return { notes: notes.map(x => [md(x.dt), x.k, x.t]), trends, s, e, n, cmp };
+  const trends = (fam === 7 && n === 7 ? vbTrends7(+rpDay) : VB_TR[fam]).map(([t, ar, pct, d]) => [t, ar, ar ? pct + '% vs. ' + cmp : 'Usual', d]);
+  const all = notes.map(x => [md(x.dt), x.k, x.t]);
+  const capped = all.length > 10 ? Array.from({ length: 10 }, (_, i) => all[Math.round(i * (all.length - 1) / 9)]) : all;   // 10 notes max, spread across the period
+  return { notes: capped, trends, s, e, n, cmp };
 }
 const vbDate = d => ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][d.getMonth()] + ' ' + pad2(d.getDate()) + ', ' + d.getFullYear();
+let VB_LAYOUT = 'r2';   // DRAFT: 'cards' = behavior trends as cards on top, notes at the bottom; 'orig' = notes first
+const VB_KEY = { Activity: 'act', Eating: 'eat', Drinking: 'drink', Barking: 'bark', Meowing: 'meow' };
+function vbTrendCards(D) {   // Figma "7 day-Health Report1": one white card, five sections with hairline dividers, chip on the right
+  return '<div class="vb-card vb-t2">' + D.trends.map(([t, ar, r, d]) => {
+    const chip = ar ? '<span class="n2-chip ' + (ar === 'up' ? 'up' : 'dn') + '"><img src="' + N2 + (ar === 'up' ? 'play_green' : 'play_red') + '.svg" alt=""><em>' + r.replace('vs. ', 'vs. ') + '</em></span>' : '<span class="vb-same">Usual</span>';
+    return '<div class="vb-s"><div class="l"><b>' + t + '</b>' + chip + '</div><p>' + d.split(/(?<=\.)\s+/).join('<br>') + '</p></div>';
+  }).join('') + '</div>';
+}
+const vbEsc = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+function vbRich(t, joiner) {   // Figma "7 day-Health Report-2": bold lead phrase, then the rest
+  return t.split(/(?<=\.)\s+/).map(sn => { const i = sn.indexOf(' than similar pets'); if (i > 0) return '<b>' + vbEsc(sn.slice(0, i)) + '</b>' + vbEsc(sn.slice(i));
+    const c = sn.indexOf(','); if (c > 0) return '<b>' + vbEsc(sn.slice(0, c)) + '</b>' + vbEsc(sn.slice(c)); return vbEsc(sn); }).join(joiner || '<br>');
+}
+function vbR2(D, per) {
+  const MO = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+  const rng = D.s.getMonth() === D.e.getMonth() ? MO[D.s.getMonth()] + ' ' + D.s.getDate() + ' - ' + D.e.getDate() + ', ' + D.e.getFullYear() : MO[D.s.getMonth()] + ' ' + D.s.getDate() + ' - ' + MO[D.e.getMonth()] + ' ' + D.e.getDate() + ', ' + D.e.getFullYear();
+  document.getElementById('vb-h3').textContent = 'Vet Brief';
+  document.getElementById('vb-dt2').innerHTML = '<img src="' + N2 + 'cal_blue.svg" alt=""><b>' + rng + '</b>';
+  const pet = '<div class="vb-pet"><div class="ph"><img src="' + N2 + 'vb_archie.jpg" alt="Archie"></div><div class="inf"><div class="g1"><b class="nm">Archie</b><div class="mt"><span>Maltipoo</span><i></i><span>2y 3m</span><i></i><span>4.2 kg</span></div></div><div class="g2"><p><b>Health:</b> Allergies, scratching furniture, urinary tract issues</p><p><b>Dietary:</b> Dry food</p></div></div></div>';
+  const trends = '<div class="vb-lab">Behavior Trends (' + per + ')</div><div class="vb-card vb-t2 r2">' + D.trends.map(([t, ar, r, d]) => {
+    const chip = ar ? '<span class="n2-chip ' + (ar === 'up' ? 'up' : 'dn') + '"><img src="' + N2 + (ar === 'up' ? 'play_green' : 'play_red') + '.svg" alt=""><em>' + r + '</em></span>' : '<span class="vb-same">Usual</span>';
+    return '<div class="vb-s"><div class="l"><b>' + t + '</b>' + chip + '</div><p>' + vbRich(d, t === 'Barking' || t === 'Meowing' ? ' ' : '<br>') + '</p></div>'; }).join('') + '</div>';
+  const groups = []; D.notes.forEach(([d, k, t]) => { let g = groups[groups.length - 1]; if (!g || g.d !== d) groups.push(g = { d, items: [] }); g.items.push([k, t.indexOf(':') < 0 ? t : t.slice(t.indexOf(':') + 1).trim()]); });
+  const notes = '<div class="vb-lab">Pet notes</div><div class="vb-card vb-tl">' + (groups.length ? groups.map(g => '<div class="tg"><div class="dt">' + g.d + '</div><div class="ln"><i></i></div><div class="en">' + g.items.map(([k, v]) => '<div class="er"><img src="' + N2 + 'i_' + k + '.png" alt=""><span>' + vbEsc(v) + '</span></div>').join('') + '</div></div>').join('') : '<div class="er"><span>No logs in this period.</span></div>') + '</div>';
+  return pet + trends + notes;
+}
 function openVB() {
+  const sh0 = document.getElementById('vb-sheet'); sh0.classList.toggle('vbR2', VB_LAYOUT === 'r2');
+  if (VB_LAYOUT !== 'r2') { document.getElementById('vb-h3').textContent = 'Archie’s Vet Brief'; document.getElementById('vb-dt2').innerHTML = ''; }
   const cust = VET_OPT === 'Custom dates' && !!VET_RNG.s, D = vbData();
-  document.getElementById('vb-body').innerHTML =
-    '<div class="vb-hd"><b>' + vbDate(D.s) + '- ' + vbDate(D.e) + '</b><span>Maltipoo<i></i>2y 3m<i></i>4 kg</span></div>' +
-    '<div class="vb-lab">Pet notes</div><div class="vb-card">' + (D.notes.length ? D.notes.map(([d, k, t]) => '<div class="vb-r"><em>' + d + '</em><img src="' + N2 + 'i_' + k + '.svg" alt=""><span>' + t.replace(/</g, '&lt;') + '</span></div>').join('') : '<div class="vb-r"><span>No logs in this period.</span></div>') + '</div>' +
+  const per = cust ? rngLabel(VET_RNG) : VET_OPT, hd = '<div class="vb-hd"><b>' + vbDate(D.s) + '- ' + vbDate(D.e) + '</b><span>Maltipoo<i></i>2y 3m<i></i>4 kg</span></div>';
+  const notesHtml = '<div class="vb-lab">Pet notes</div><div class="vb-card">' + (D.notes.length ? D.notes.map(([d, k, t]) => '<div class="vb-r"><em>' + d + '</em><img src="' + N2 + 'i_' + k + '.png" alt=""><span>' + t.replace(/</g, '&lt;') + '</span></div>').join('') : '<div class="vb-r"><span>No logs in this period.</span></div>') + '</div>';
+  if (VB_LAYOUT === 'r2') document.getElementById('vb-body').innerHTML = vbR2(D, per);
+  else if (VB_LAYOUT === 'cards') document.getElementById('vb-body').innerHTML = hd + '<div class="vb-lab">Behavior Trends (' + per + ')</div>' + vbTrendCards(D) + notesHtml;
+  else document.getElementById('vb-body').innerHTML =
+    hd +
+    '<div class="vb-lab">Pet notes</div><div class="vb-card">' + (D.notes.length ? D.notes.map(([d, k, t]) => '<div class="vb-r"><em>' + d + '</em><img src="' + N2 + 'i_' + k + '.png" alt=""><span>' + t.replace(/</g, '&lt;') + '</span></div>').join('') : '<div class="vb-r"><span>No logs in this period.</span></div>') + '</div>' +
     '<div class="vb-lab">Behavior Trends (' + (cust ? rngLabel(VET_RNG) : VET_OPT) + ')</div><div class="vb-card vb-t">' + D.trends.map(([t, ar, r, d]) => '<div class="vb-tr"><div class="l"><b>' + t + '</b><span>' + (ar ? '<img src="' + N2 + 'tr_' + ar + '.svg" alt="">' : '') + r + '</span></div><p>' + d + '</p></div>').join('') + '</div>';
   const sh = document.getElementById('vb-sheet'); sh.classList.add('show'); document.getElementById('vb-body').scrollTop = 0;
   requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
 }
 function vbShareText() {
   const D = vbData();
+  if (VB_LAYOUT !== 'orig') return 'Archie’s Vet Brief\n' + vbDate(D.s) + ' - ' + vbDate(D.e) + '\nMaltipoo · 2y 3m · 4 kg\n\nBehavior Trends (' + (VET_OPT === 'Custom dates' && VET_RNG.s ? rngLabel(VET_RNG) : VET_OPT) + ')\n' + D.trends.map(([t, ar, r, d]) => t + ': ' + r + ' – ' + d).join('\n') + '\n\nPet notes\n' + (D.notes.length ? D.notes.map(([d, k, t]) => d + '  ' + t).join('\n') : 'No logs in this period.');
   return 'Archie’s Vet Brief\n' + vbDate(D.s) + ' - ' + vbDate(D.e) + '\nMaltipoo · 2y 3m · 4 kg\n\nPet notes\n' + (D.notes.length ? D.notes.map(([d, k, t]) => d + '  ' + t).join('\n') : 'No logs in this period.') +
     '\n\nBehavior Trends (' + (VET_OPT === 'Custom dates' && VET_RNG.s ? rngLabel(VET_RNG) : VET_OPT) + ')\n' + D.trends.map(([t, ar, r, d]) => t + ': ' + r + ' – ' + d).join('\n');
 }
@@ -3148,11 +3312,20 @@ async function vbShare() {
   catch (e) { hlToast('Sharing isn’t available on this device', true); }
 }
 function closeVB() { const sh = document.getElementById('vb-sheet'); if (!sh || !sh.classList.contains('show')) return; sh.classList.remove('on'); setTimeout(() => sh.classList.remove('show'), 330); }
+function hlWeightKey(v) {   // on-screen keypad and a real keyboard both type into the weight field
+  const hl = document.getElementById('hl-sheet'), w = hl.querySelector('.hl-wt'); if (!w) return;
+  if (v === '') { /* refresh only */ }
+  else if (v === 'bk') HLS.weight = HLS.weight.slice(0, -1);
+  else if (v === '.') { if (!HLS.weight.includes('.')) HLS.weight = (HLS.weight || '0') + '.'; }
+  else if (HLS.weight.replace('.', '').length < 5) HLS.weight += v;
+  w.querySelector('span').textContent = HLS.weight || '0.00'; w.classList.toggle('has', !!HLS.weight); const wi = hl.querySelector('.hl-wtin'); if (wi) wi.value = HLS.weight; hlUpdateSave();
+}
+function hlFocusWt() { const i = document.querySelector('#hl-sheet .hl-wtin'); if (i) { i.value = HLS.weight; i.focus({ preventScroll: true }); } }
 function setupHealthSheets() {
   document.getElementById('screen').insertAdjacentHTML('beforeend',
     '<div class="sh2" id="hl-sheet" aria-hidden="true"><div class="sc" data-hl-close></div><div class="pane"><div class="pane-h"><div class="hh"><button class="hb" data-hl-close aria-label="Back"><img src="' + N2 + 'back.svg" alt=""></button><h3>Health Log</h3><button class="hs" data-save>Save</button></div><div class="hd" id="hl-date"></div></div><div class="pane-b hl-b" id="hl-body"></div>' +
     '<div class="hl-kp" id="hl-kp">' + hlKeypad() + '</div><div class="hl-qw" id="hl-qw"></div></div></div>' +
-    '<div class="sh2" id="vb-sheet" aria-hidden="true"><div class="sc" data-vb-close></div><div class="pane"><div class="pane-h vb-h"><div class="hh2"><h3>Archie’s Vet Brief</h3><button class="hx" data-vb-close aria-label="Close"><img src="' + N2 + 'close.svg" alt=""></button></div></div><div class="pane-b vb-b" id="vb-body"></div>' +
+    '<div class="sh2" id="vb-sheet" aria-hidden="true"><div class="sc" data-vb-close></div><div class="pane"><div class="pane-h vb-h"><div class="hh2"><h3 id="vb-h3">Archie’s Vet Brief</h3><button class="hx" data-vb-close aria-label="Close"><img src="' + N2 + 'close.svg" alt=""></button></div><div class="vb-dt2" id="vb-dt2"></div></div><div class="pane-b vb-b" id="vb-body"></div>' +
     '<div class="vb-f"><button class="b1" data-vb-share>Share</button><button class="b2" data-vb-close>Download</button></div></div></div>');
   const hl = document.getElementById('hl-sheet');
   hl.addEventListener('click', e => {
@@ -3167,6 +3340,7 @@ function setupHealthSheets() {
       hlUpdateSave(); return;
     }
     if (t.closest('[data-hldelete]')) { const id = HL_EDIT; hlResetDraft(); closeHL(true); hlDelete(id); return; }
+    const rm = t.closest('[data-hlrm]'); if (rm) { hlDelete(rm.dataset.hlrm); renderHL(); return; }
     const fd = t.closest('[data-fooddel]'); if (fd) { HLS.foodList.splice(+fd.dataset.fooddel, 1); renderHL(); return; }
     if (t.closest('[data-foodadd]')) {
       if (!HLS.food) return;
@@ -3176,7 +3350,9 @@ function setupHealthSheets() {
     const vd = t.closest('[data-vacdel]'); if (vd) { HLS.vacList.splice(+vd.dataset.vacdel, 1); renderHL(); return; }
     if (t.closest('[data-vacadd]')) {
       const v = HLS.vacOther.trim(); if (!v) return;
-      HLS.vacList.push(v); HLS.vacOther = ''; renderHL(); const f = document.querySelector('#hl-body [data-f="vacOther"]'); if (f) { f.focus({ preventScroll: true }); hkShow(f); } return;
+      if (!VAC_OPTS.some(o => o.trim().toLowerCase() === v.toLowerCase())) VAC_OPTS.push(v);          // becomes a button before "Others"
+      const key = VAC_OPTS.find(o => o.trim().toLowerCase() === v.toLowerCase()); if (!HLS.vac.includes(key)) HLS.vac = HLS.vac.concat(key);
+      HLS.vacOther = ''; renderHL(); const f = document.querySelector('#hl-body [data-f="vacOther"]'); if (f) { f.focus({ preventScroll: true }); hkShow(f); } return;
     }
     if (t.closest('[data-vacother]')) {
       HLS.vacOpen = !HLS.vacOpen; if (!HLS.vacOpen) { HLS.vacOther = ''; HLS.vacList = []; }
@@ -3190,23 +3366,24 @@ function setupHealthSheets() {
     }
     const clr = t.closest('[data-clr]'); if (clr) { const inp = clr.parentElement.querySelector('.hl-in'); inp.value = ''; HLS[inp.dataset.f] = ''; clr.parentElement.classList.remove('has'); hlUpdateSave(); hkShow(inp); inp.focus({ preventScroll: true }); return; }
     const fld = t.closest('.hl-in'); if (fld) { hkShow(fld); return; }
-    if (t.closest('[data-wt]')) { hkHide(); hl.classList.add('kbd2'); hl.querySelector('.hl-wt').classList.add('focus'); return; }
-    const k = t.closest('[data-k]'); if (k) {
-      const v = k.dataset.k;
-      if (v === 'bk') HLS.weight = HLS.weight.slice(0, -1);
-      else if (v === '.') { if (!HLS.weight.includes('.')) HLS.weight = (HLS.weight || '0') + '.'; }
-      else if (HLS.weight.replace('.', '').length < 5) HLS.weight += v;
-      const w = hl.querySelector('.hl-wt'); w.querySelector('span').textContent = HLS.weight || '0.00'; w.classList.toggle('has', !!HLS.weight); hlUpdateSave(); return;
-    }
+    if (t.closest('[data-wt]')) { hkHide(); hl.classList.add('kbd2'); hl.querySelector('.hl-wt').classList.add('focus'); hlFocusWt(); return; }
+    const k = t.closest('[data-k]'); if (k) { hlWeightKey(k.dataset.k); return; }
     if (!t.closest('.hl-in') && !t.closest('.hl-qw')) hkHide();
     if (!t.closest('.hl-kp')) { hl.classList.remove('kbd2'); const w = hl.querySelector('.hl-wt'); if (w) w.classList.remove('focus'); }
   });
+  hl.addEventListener('input', e => {
+    const wi = e.target.closest && e.target.closest('.hl-wtin'); if (!wi) return;
+    let v = wi.value.replace(',', '.').replace(/[^0-9.]/g, ''); const d = v.indexOf('.'); if (d >= 0) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, '');
+    while (v.replace('.', '').length > 5) v = v.slice(0, -1);
+    HLS.weight = v; hlWeightKey('');
+  });
+  hl.addEventListener('keydown', e => { if (e.target.closest && e.target.closest('.hl-wtin') && (e.key === 'Enter' || e.key === 'Escape')) { e.preventDefault(); hl.classList.remove('kbd2'); const w = hl.querySelector('.hl-wt'); if (w) w.classList.remove('focus'); e.target.blur(); } });
   hl.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('.hl-in')) hkShow(e.target); });
   const qw = document.getElementById('hl-qw');
   qw.addEventListener('pointerdown', e => e.preventDefault());
   qw.addEventListener('mousedown', e => e.preventDefault());
   qw.addEventListener('click', e => { e.stopPropagation(); hkKey(e.target); });
-  hl.addEventListener('input', e => { const f = e.target.dataset.f; if (f) { HLS[f] = e.target.value; const w = e.target.closest('.hl-inw'); if (w) { w.classList.toggle('has', !!e.target.value); const cn = w.querySelector('.hl-cnt'); if (cn) cn.textContent = e.target.value.length + '/200'; } const ad = e.target.closest('.hl-card') && e.target.closest('.hl-card').querySelector('.hl-add'); if (ad) ad.classList.toggle('off', !HLS[ad.dataset.addf]); hlUpdateSave(); } });
+  hl.addEventListener('input', e => { const f = e.target.dataset.f; if (f) { HLS[f] = e.target.value; const w = e.target.closest('.hl-inw'); if (w) { w.classList.toggle('has', !!e.target.value); const cn = w.parentElement.querySelector('.hl-cnt'); if (cn) cn.textContent = e.target.value.length + '/200'; } const ad = e.target.closest('.hl-card') && e.target.closest('.hl-card').querySelector('.hl-add'); if (ad) ad.classList.toggle('off', !HLS[ad.dataset.addf]); hlUpdateSave(); } });
   document.getElementById('vb-sheet').addEventListener('click', e => { if (e.target.closest('[data-vb-share]')) return vbShare(); if (e.target.closest('[data-vb-close]')) closeVB(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHL(); closeVB(); } });
 }
@@ -3244,6 +3421,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => n2Fi
 function renderReportDay(d) {
   stopDiaryVideo();
   rpDay = d;
+  if (VET_RNG.e && VET_RNG.e > +d) { VET_RNG = { s: null, e: null }; if (VET_OPT === 'Custom dates') VET_OPT = 'Last 7 days'; }
   renderStrip(d);
   closeCalendar();
   document.querySelectorAll('#rp-days .rp-day').forEach(b => b.classList.toggle('on', b.dataset.rpday === d));
@@ -3256,6 +3434,14 @@ function renderReportDay(d) {
   rpPrimeCharts();
 }
 
+
+function setDesign(des) {
+  RP_DESIGN = des;
+  document.querySelectorAll('#design-panel [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === des));
+  const page = document.getElementById('page-report');
+  if (!page.classList.contains('show')) { document.querySelector('.nav-item[data-tab="report"]').click(); return; }
+  const top = page.scrollTop; renderReportDay(rpDay); page.scrollTop = top;
+}
 
 // ─── Calendar dropdown ───
 const CAL_ROWS = [[1, 2, 3, 4, 5, 6, 7], [8, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30]];   // Nov 2026 (the 1st is a Sunday, same columns as the week strip)
@@ -3324,6 +3510,7 @@ function setupReportPage() {
       VET_RNG = { s: Math.min(DPS.s, DPS.e), e: Math.max(DPS.s, DPS.e) }; CD_OPEN = false; document.querySelector('.n2-vet').outerHTML = n2Vet(); return;
     }
     if (e.target.closest('.rp-foot')) return openLM();
+    const ha = e.target.closest('[data-hleditall]'); if (ha) return openHL();
     const he = e.target.closest('[data-hledit]'); if (he) return openHLEdit(he.dataset.hledit);
     const ho = e.target.closest('[data-hlopen]'); if (ho) return openHL(ho.dataset.hlopen);
     const vs = e.target.closest('[data-vetsel]'); if (vs) { vs.closest('.n2-vet').classList.toggle('open'); return; }
@@ -3388,6 +3575,28 @@ setupReportPage();
   fit();
 })();
 document.addEventListener('touchmove', function(e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+</script>
+<button id="dp-toggle" aria-label="Show designs">Designs</button>
+<aside id="design-panel" aria-label="Design versions"><h4>Nanny Report Optimization / Health Log / Vet Brief</h4>
+  <button data-d="O">Current Design</button>
+  <button data-d="N" class="on">Design A</button>
+  <div class="dp-lab">Health Log</div>
+  <div class="seg" role="group" aria-label="Health Log layout"><button data-eo="D" class="on">List</button><button data-eo="E">Tags</button></div>
+  <div class="prem" style="display:flex"><span><b>Premium features</b></span><button class="sw on" id="prem-sw" aria-label="Premium features"><i></i></button></div>
+</aside>
+<script>
+const dpPanel = document.getElementById('design-panel'), dpTog = document.getElementById('dp-toggle');
+dpTog.addEventListener('click', e => { e.stopPropagation(); dpPanel.classList.toggle('open'); });
+document.addEventListener('pointerdown', e => { if (dpPanel.classList.contains('open') && !dpPanel.contains(e.target) && e.target !== dpTog) dpPanel.classList.remove('open'); });
+dpPanel.addEventListener('click', e => {
+  const eo = e.target.closest('button[data-eo]');
+  if (eo) { HL_OPT = eo.dataset.eo; dpPanel.querySelectorAll('button[data-eo]').forEach(x => x.classList.toggle('on', x === eo)); const pg = document.getElementById('page-report'); if (pg.classList.contains('show')) { const t = pg.scrollTop; renderReportDay(rpDay); pg.scrollTop = t; } return; }
+  const sw = e.target.closest('#prem-sw');
+  if (sw) { PREMIUM = !PREMIUM; sw.classList.toggle('on', PREMIUM); const pg = document.getElementById('page-report'); if (pg.classList.contains('show')) { const t = pg.scrollTop; renderReportDay(rpDay); pg.scrollTop = t; } return; }
+  const b = e.target.closest('button[data-d]'); if (!b) return;
+  setDesign(b.dataset.d);
+  if (matchMedia('(max-width: 560px)').matches) setTimeout(() => dpPanel.classList.remove('open'), 150);
+});
 </script>
 <script>
 // open straight on the Nanny Report page
