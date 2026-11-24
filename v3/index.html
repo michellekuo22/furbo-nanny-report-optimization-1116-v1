@@ -3314,16 +3314,16 @@ function vbObs(D) {   // Key Observation: plain wording, no numbers (7 days = th
     return 'Archie was ' + B(act) + ' this week, while ' + B(ed) + '. ' + bk;
   }
   const q = n => pc(n) >= 15 ? 'noticeably ' : pc(n) <= 6 ? 'slightly ' : '';          // size of the activity change, in words
-  const dn = n => a(n) === 'up' ? 'up' : 'down';
+  const dn = n => a(n) === 'up' ? 'up' : 'down', id = n => a(n) === 'up' ? 'increased' : 'decreased';
   const e = a('Eating'), d = a('Drinking');
   const edUp = !e && !d ? 'eating and drinking steady' : e && e === d ? 'eating and drinking both ' + dn('Eating') : e && d ? 'eating ' + dn('Eating') + ' but drinking ' + dn('Drinking') : e ? 'eating ' + dn('Eating') + ' and drinking steady' : 'drinking ' + dn('Drinking') + ' and eating steady';
   const prev = f14 ? 'the prior 2 weeks' : f30 ? 'last month' : 'the prior ' + D.n + ' days';
   if (f30) {
-    const act = a('Activity') ? 'Archie’s activity trended ' + B(q('Activity') + (a('Activity') === 'up' ? 'higher' : 'lower') + ' than usual') : 'Archie’s activity ' + B('stayed level');
-    const ed2 = !e && !d ? 'Eating and drinking ' + B('stayed level') : e && e === d ? 'Eating and drinking were both ' + B(dn('Eating')) : e && d ? 'Eating was ' + B(dn('Eating')) + ' and drinking ' + B(dn('Drinking')) : e ? 'Eating was ' + B(dn('Eating')) + ' and drinking ' + B('level') : 'Drinking was ' + B(dn('Drinking')) + ' and eating ' + B('level');
-    return 'Over the past month, ' + act + '. ' + ed2 + '. ' + (a('Barking') ? 'Barking ' + B(a('Barking') === 'up' ? 'climbed' : 'eased') : 'Barking ' + B('held level')) + ' vs. ' + prev + '.';
+    const act = a('Activity') ? 'Archie’s activity trended ' + q('Activity') + B((a('Activity') === 'up' ? 'higher' : 'lower') + ' than usual') : 'Archie’s activity ' + B('stayed level');
+    const ed2 = !e && !d ? 'Eating and drinking ' + B('stayed level') : e && e === d ? 'Eating and drinking both ' + B(id('Eating')) : e && d ? 'Eating ' + B(id('Eating')) + ', drinking ' + B(id('Drinking')) : e ? 'Eating ' + B(id('Eating')) + ', drinking ' + B('level') : 'Drinking ' + B(id('Drinking')) + ', eating ' + B('level');
+    return 'This month, ' + act + '. ' + ed2 + '. ' + (a('Barking') ? 'Barking ' + B(id('Barking')) : 'Barking ' + B('stayed level')) + ' compared to ' + prev + '.';
   }
-  const act = a('Activity') ? B(q('Activity') + mv('Activity') + ' active than usual') : B('as active as usual');
+  const act = a('Activity') ? q('Activity') + B(mv('Activity') + ' active than usual') : B('as active as usual');
   const per = f14 ? 'over two weeks' : 'over ' + D.n + ' days';
   return 'Archie has been ' + act + ' ' + per + ', with ' + B(edUp) + '. ' + (a('Barking') ? B('Barking also ' + (a('Barking') === 'up' ? 'increased' : 'decreased')) : B('Barking held steady')) + ' vs. ' + prev + '.';
 }
