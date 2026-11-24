@@ -2773,11 +2773,11 @@ const n2Icon = k => '<div class="n2-ic" style="width:' + ICO[k].w + 'px;height:'
 const n2Letters = d => { const L = 'SMTWTFS', wd = x => (x - 8 + 70) % 7; return RP_X.map((_, i) => L[wd(+d - 6 + i)]); };
 // ── per-day report data: the 18th is the Figma design; every other day gets its own numbers, clip and diary ──
 const DD_DIARY = [
-  { poster: 'assets/d/poster_walking.jpg', vid: 'walking', txt: 'Archie had a calm day. He wandered around the living room, took a long nap on the couch, and munched on his kibble in the afternoon.' },
-  { poster: 'assets/d/poster_barking1.jpg', vid: 'barking1', txt: 'A noisy morning for Archie! He barked at a delivery around 9:23, then settled down and spent the rest of the day relaxing.' },
-  { poster: 'assets/d/poster_lying.jpg', vid: 'lying', txt: 'Archie spent most of today lying on the couch. He woke up for a quick drink of water and a short stroll before bed.' },
-  { poster: 'assets/d/poster_barking2.jpg', vid: 'barking2', txt: 'Archie was playful today. He chewed on his favorite toy, ran a few laps around the sofa, and barked at the window at 10:01.' },
-  { poster: 'assets/d/poster_live.jpg', vid: 'live', txt: 'Today was a quiet one. Archie checked out the kitchen, sat by the window, and Teddy joined him for a snack in the evening.' },
+  { poster: 'assets/d/poster_walking.jpg', vid: 'walking', txt: 'Archie had a calm day, balancing naps, meals, and gentle strolls. He wandered around the living room, sniffed his favorite spots, and occasionally paused to look out the window. He spent most of the afternoon relaxing on the rug before eagerly greeting you at the door.' },
+  { poster: 'assets/d/poster_barking1.jpg', vid: 'barking1', txt: 'Archie had an eventful day, balancing naps, meals, and a few noisy moments. He barked at a delivery in the morning, then settled down and explored the living room. He spent most of the afternoon resting before eagerly greeting you at the door.' },
+  { poster: 'assets/d/poster_lying.jpg', vid: 'lying', txt: 'Archie had a lazy day, balancing long naps, meals, and drinking breaks. He stretched out on the rug, woke up for a quick drink of water, and took a short stroll around the house. He spent most of the afternoon resting before eagerly greeting you at the door.' },
+  { poster: 'assets/d/poster_barking2.jpg', vid: 'barking2', txt: 'Archie had a playful day, balancing naps, meals, drinking, and plenty of toy time. He chewed on his favorite toy, ran a few laps around the sofa, and occasionally barked at the window. He spent most of the afternoon resting before eagerly greeting you at the door.' },
+  { poster: 'assets/d/poster_live.jpg', vid: 'live', txt: 'Archie had a quiet day, balancing naps, meals, and time by the window. He checked out the kitchen, watched the world go by, and occasionally barked at outside noises. He spent most of the afternoon resting before eagerly greeting you at the door.' },
 ];
 const ddRnd = seed => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
 // Figma "Nanny Report Optimization Revised": 11/24 (Everyday) and 11/21 (Saturday) are the drawn frames; other days get their own numbers
@@ -2789,18 +2789,21 @@ const BASE = {
         bark: { n: 25, avg: 40, pct: 10, up: true, sim: 22 },
         wk: 'Archie <b>ate 30% more</b> and <b>moved 20% less</b> this week. Cooler weather or extra treats are common reasons.' },
 };
-const DIARY_BASE = 'Today, Archie had a fun-filled day! He played, sat in the cage, and enjoyed looking out the window.';
+const DIARY_BASE = 'Archie had a quiet day, balancing naps, meals, and time by the window. He checked out the kitchen, watched the world go by, and occasionally barked at outside noises. He spent most of the afternoon resting before eagerly greeting you at the door.';
+const DIARY_THU = 'Archie had a relaxing day, balancing naps, meals, drinking, and playful moments. He explored the living room, played with his toys, and occasionally barked at outside noises. He spent most of the afternoon resting before eagerly greeting you at the door.';   // every Thursday
 function dayData(d) {
   const n = +d, r = ddRnd(n * 7919 + 13), pick = (lo, hi) => lo + Math.round(r() * (hi - lo));
   const x = BASE[n] ? JSON.parse(JSON.stringify(BASE[n])) : {};
-  if (BASE[n]) { x.base = true; x.diary = { poster: N2 + 'diary_poster.jpg', vid: n % 2 === 0 ? 'lying' : 'live', txt: DIARY_BASE }; }
+  if (BASE[n]) { x.base = true; x.diary = { poster: '', vid: 'live', txt: DIARY_BASE }; }
   else {
     x.eat = { n: pick(4, 9), avg: pick(6, 8), pct: pick(5, 24) }; x.drink = { n: pick(8, 15), avg: pick(8, 11), pct: pick(6, 22) };
     x.act = { n: pick(230, 380), avg: pick(280, 330), pct: pick(4, 18), sim: 350 }; x.bark = { n: pick(15, 60), avg: pick(30, 48), pct: pick(4, 20), sim: 22 };
     [x.eat, x.drink, x.act, x.bark].forEach(o => { o.up = o.n >= o.avg; });   // chip colour always agrees with the "more / less than usual" wording
-    x.diary = DD_DIARY[(n * 3 + 1) % DD_DIARY.length];
+    x.diary = Object.assign({}, DD_DIARY[(n * 3 + 1) % DD_DIARY.length]);
   }
   [x.act, x.bark].forEach(o => { const m = Math.max(o.n, o.sim); o.fa = o.n / m; o.fs = o.sim / m; });   // bar lengths are proportional to the numbers (longest bar = full track)
+  x.diary.poster = N2 + 'diary_' + (((n - 24) % 5 + 5) % 5 + 1) + '.jpg'; x.diary.vid = 'live';   // thumbnail rotates through the 5 stills; every day plays the same clip as 11/24
+  if (new Date(2026, 10, n).getDay() === 4) x.diary = Object.assign({}, x.diary, { txt: DIARY_THU });
   x.jit = n;
   return x;
 }
@@ -2874,7 +2877,7 @@ function n2Act(d) {
 function n2Bark(d) {
   const D = dayData(d), b = D.bark, u = ddCmp(b.n, b.avg), s = b.n < b.sim ? 'less' : 'more';
   const head = PREMIUM
-    ? '<p class="n2-p">Archie barked ' + bd(u + ' than usual') + ' today' + (u === s ? ' and ' : ', but still ') + bd(s + ' than similar dogs') + '.</p>' + n2Cmp(b.n, b.sim, 'times today', 'times/day', b.fa, b.fs)
+    ? '<p class="n2-p">Archie barked ' + bd(u + ' than usual') + ' today' + (u === s ? ' and ' : ', but still ') + bd(s + ' than similar dogs') + '.</p>' + n2Cmp(b.n, b.sim, 'times today', 'times/day avg.', b.fa, b.fs)
     : '<p class="n2-p">Archie was barking <b>' + b.n + ' times</b> today, ' + u + ' than usual.</p>';
   return head + n2Gray('bark', 'Barking', b, d) +
     '<div class="rp-soothe2"><img src="' + A + 'B2_soothe.svg" alt=""><span>Ease your pets’ nerves with <a href="javascript:void(0)">Calm My Pet</a></span></div>';
