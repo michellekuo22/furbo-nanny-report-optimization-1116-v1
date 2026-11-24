@@ -852,10 +852,10 @@ img { display: block; }
 .n2-p { margin: 0; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; }
 .n2-p b { font-weight: 700; } .n2-p .r { font-weight: 400; }
 .n2-info { width: 18px; height: 18px; flex: none; display: block; }
-.n2-dtext { display: flex; align-items: center; gap: 4px; margin-top: 16px; cursor: pointer; }
+.n2-dtext { display: flex; align-items: flex-start; gap: 4px; margin-top: 16px; cursor: pointer; }
 .n2-dtext p { flex: 1; margin: 0; font-size: 14px; line-height: 20px; font-weight: 400; color: #434343; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .n2-dtext.open p { -webkit-line-clamp: unset; display: block; }
-.n2-dtext img { width: 20px; height: 20px; flex: none; transition: transform .25s ease; }
+.n2-dtext img { width: 20px; height: 20px; flex: none; margin-top: 10px; transition: transform .25s ease; }
 .n2-dtext.open img { transform: rotate(180deg); }
 .n2-wk { position: relative; border-radius: 16px; border: .5px solid transparent;
   background: linear-gradient(151deg, rgba(218,180,250,.22), rgba(161,208,251,.22)) padding-box, linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #9B75FB, #5197D8) border-box; }
@@ -1845,7 +1845,7 @@ function setTab(tab) {
   if (was === 'home') { stopBubble(); $chatHome.querySelectorAll('video').forEach(v => v.pause()); }
   if (tab === 'home') { startBubble(); armClips($chatHome); }
   if (tab === 'video') resetVideoPage();
-  if (tab === 'report') { startReportLoading(); if (rpDay !== '24') renderReportDay('24'); document.getElementById('page-report').scrollTop = 0; rpPrimeCharts(); }
+  if (tab === 'report') { startReportLoading(); if (rpDay !== '21') renderReportDay('21'); document.getElementById('page-report').scrollTop = 0; rpPrimeCharts(); }
   if (tab === 'menu') { document.getElementById('page-menu').scrollTop = 0; document.querySelector('.menu-head').classList.remove('scrolled'); }
   syncLiveVideo();
   $screen.classList.toggle('off-home', tab !== 'home');
@@ -2749,10 +2749,10 @@ function setupPlayer() {
 }
 
 // ═══ Nanny Report — 1116 V1 (Design A / Design B, from Figma "Claude V2") ═══
-let rpDay = '24';
+let rpDay = '21';
 const A = 'assets/n/', N2 = 'assets/n2/';
 const pad2 = n => String(n).padStart(2, '0');
-const RP_TODAY = 25, RP_READY = 24;      // opens on Tue 11/24 (yesterday's report); today (Wed 11/25) is still "in the works"
+const RP_TODAY = 25, RP_READY = 24;      // opens on Sat 11/21 (Saturday state; swipe right / tap for 11/24); today (Wed 11/25) is still "in the works"
 let PREMIUM = true;
 const RP_X = [4, 25, 46, 67, 88, 109, 130];
 const ICO = {   // [file, left, top, w, h] inside the icon box (Figma geometry)
@@ -3310,7 +3310,7 @@ function setupWeekSwipe() {
 }
 function setupReportPage() {
   document.getElementById('rp-days').addEventListener('click', e => { const b = e.target.closest('.rp-day'); if (b) renderReportDay(b.dataset.rpday); });
-  renderReportDay('24');
+  renderReportDay('21');
   setupWeekSwipe();
   setupInfoSheet();
   setupHealthSheets();
